@@ -13,4 +13,14 @@ public enum HttpMethod {
     public String toString() {
         return string;
     }
+
+    public static HttpMethod fromString(String method) {
+        for (HttpMethod httpMethod : HttpMethod.values()) {
+            if (httpMethod.toString().equals(method)) {
+                return httpMethod;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown method name \"" + method + "\"");
+    }
 }
