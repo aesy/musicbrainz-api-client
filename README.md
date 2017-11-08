@@ -4,7 +4,7 @@
 [![Travis](https://img.shields.io/travis/aesy/musicbrainz-api-client.svg)](https://travis-ci.org/aesy/musicbrainz-api-client)
 [![License](https://img.shields.io/github/license/aesy/musicbrainz-api-client.svg)](https://github.com/aesy/musicbrainz-api-client/blob/master/LICENSE)
 
-A complete Java wrapper library for [MusicBrainz](https://musicbrainz.org/) web service API (version 2).
+A complete Java 8+ wrapper library for [MusicBrainz](https://musicbrainz.org/) web service API (version 2).
 
 ### [API Reference](https://aesy.github.io/musicbrainz-api-client/)
 
@@ -14,15 +14,15 @@ with a default HTTP client. You can provide your own client, such as [OkHttp](ht
 the static inner builder inside MusicBrainzApiClient. Clients must implement `HttpClient`. Some adapter classes are 
 already available by adding additional dependencies (See [below](#optional-dependencies)).
 
-#### Client examples:
+### Client examples:
 
-##### Default client:
+#### Default client:
 
 ```java
 MusicBrainzApiClient musicBrainz = new MusicBrainzApiClient();
 ```
 
-##### OkHttp client (requires `okhttp-adapter` dependency):
+#### OkHttp client (requires `adapter-okhttp` dependency):
 
 ```java
 OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -36,27 +36,27 @@ MusicBrainzApiClient musicBrainz = new MusicBrainzApiClient.Builder()
 
 All methods on a `MusicBrainzApiClient` return a `ApiRequest`. No actual HTTP request is sent though until one of two 
 methods is called on this request. These methods are: `ApiRequest#execute` and `ApiRequest#executeAsync`. 
-Like the names suggest, the first one is syncronous, while the second is asyncronous. The asyncronous method may take 
+Like the names suggest, the first one is synchronous, while the second is asynchronous. The asynchronous method may take 
 a callback/listener, or else it will return a `Future`.
 
-#### Request examples:
+### Request examples:
 
-##### Syncronous request:
+#### Syncronous request:
 
 ```java
 List<Artist> artists = client.artist.search("Peter Gabriel") // Create a search request.
-                                    .execute()   // Execute the HTTP request syncronously and returns a `ApiResponse`.
+                                    .execute()   // Execute the HTTP request synchronously and returns a `ApiResponse`.
                                     .getOrNull() // Get a mapped entity of the response body (in this case an 
                                                  // `ArtistList` or null in case an error occurred. 
                                     .getItems(); // Get list of artist entities.
 System.out.println(artists.size()); 
 ```
 
-##### Asyncronous request with callback:
+#### Asynchronous request with callback:
 
 ```java
 client.artist.search("Peter Gabriel") // Create a search request.
-             // Execute the request asyncronously and provide a callback.
+             // Execute the request asynchronously and provide a callback.
              .executeAsync(new ApiRequestCallbackAdapter<ArtistList>() {
                  // Only called on success, meaning that `ApiResponse#get` is guaranteed not to throw.
                  @Override
@@ -67,11 +67,11 @@ client.artist.search("Peter Gabriel") // Create a search request.
              });
 ```
 
-##### Asyncronous request with Future:
+#### Asynchronous request with Future:
 
 ```java
 client.artist.search("Peter Gabriel") // Create a search request.
-             .executeAsync()          // Execute the request asyncronously and return a Future.
+             .executeAsync()          // Execute the request asynchronously and return a Future.
              .thenApply(response -> response.get().getItems().size()) // Get the amount of artists.
              .thenAccept(System.out::println);                        // Print the result if no error occurred.
 ```
