@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    elementFormDefault="qualified"
+                    xmlns:ext="http://musicbrainz.org/ns/ext#-2.0"
+                    targetNamespace="http://musicbrainz.org/ns/ext#-2.0">
+    <xs:attribute name="score" type="xs:int"/>
+</xs:schema>

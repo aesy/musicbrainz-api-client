@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.aesy.musicbrainz</groupId>
+        <artifactId>musicbrainz-api-client</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>musicbrainz-api-entities</artifactId>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- TODO fetch Relax NG schema -->
+
+            <!--<plugin>-->
+                <!--<groupId>net.sigmalab.trang</groupId>-->
+                <!--<artifactId>trang-maven-plugin</artifactId>-->
+                <!--<version>1.2</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>convert-xsd</id>-->
+                        <!--<phase>generate-sources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>trang</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<inputFiles>-->
+                                <!--<inputFile>src/main/resources/musicbrainz_mmd-2.0.rng</inputFile>-->
+                            <!--</inputFiles>-->
+                            <!--<outputDirectory>src/main/resources</outputDirectory>-->
+                            <!--<outputFileName>musicbrainz_mmd-2.0.xsd</outputFileName>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.14.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-entities</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources</schemaDirectory>
+                            <generateDirectory>target/generated-sources</generateDirectory>
+                            <generatePackage>org.aesy.musicbrainz.entity</generatePackage>
+                            <removeOldOutput>true</removeOldOutput>
+                            <markGenerated>true</markGenerated>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>
