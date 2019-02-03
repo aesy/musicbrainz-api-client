@@ -1,7 +1,7 @@
-package org.easy.musicbrainz.exception;
+package org.aesy.musicbrainz.exception;
 
-public class MusicBrainzNetworkException extends MusicBrainzException {
-    public MusicBrainzNetworkException() {}
+public class MusicBrainzNetworkException
+    extends MusicBrainzException {
 
     public MusicBrainzNetworkException(String message) {
         super(message);
@@ -14,4 +14,5 @@ public class MusicBrainzNetworkException extends MusicBrainzException {
     public MusicBrainzNetworkException(Throwable cause) {
         super(cause);
     }
+
 }
