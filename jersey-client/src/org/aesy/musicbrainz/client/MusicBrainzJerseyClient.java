@@ -168,15 +168,22 @@ public final class MusicBrainzJerseyClient
     public static final class Builder {
 
         @NotNull
+        private static final Client DEFAULT_CLIENT;
+
+        @NotNull
         private static final String DEFAULT_API_BASE_URL;
 
         @NotNull
         private static final String DEFAULT_USER_AGENT;
 
         static {
+            DEFAULT_CLIENT = ClientBuilder.newClient();
             DEFAULT_API_BASE_URL = "https://musicbrainz.org/ws/2";
             DEFAULT_USER_AGENT = String.format("%s/%s (%s)", APPLICATION_NAME, VERSION, URL);
         }
+
+        @Nullable
+        private Client client;
 
         @Nullable
         private String baseUrl;
@@ -191,6 +198,13 @@ public final class MusicBrainzJerseyClient
         private String password;
 
         private Builder() {}
+
+        @NotNull
+        public Builder client(@NotNull Client client) {
+            this.client = client;
+
+            return this;
+        }
 
         @NotNull
         public Builder baseUrl(@NotNull String baseUrl) {
@@ -240,15 +254,8 @@ public final class MusicBrainzJerseyClient
 
         @NotNull
         public MusicBrainzClient build() {
-            Client client = ClientBuilder.newClient();
-
-            String userAgent;
-
-            if (this.userAgent != null) {
-                userAgent = this.userAgent;
-            } else {
-                userAgent = DEFAULT_USER_AGENT;
-            }
+            Client client = getOrDefault(this.client, DEFAULT_CLIENT);
+            String userAgent = getOrDefault(this.userAgent, DEFAULT_USER_AGENT);
 
             client.register(new JerseyClientUserAgentFilter(userAgent));
 
@@ -258,17 +265,19 @@ public final class MusicBrainzJerseyClient
                 client.register(auth);
             }
 
-            String baseUrl;
-
-            if (this.baseUrl != null) {
-                baseUrl = this.baseUrl;
-            } else {
-                baseUrl = DEFAULT_API_BASE_URL;
-            }
-
+            String baseUrl = getOrDefault(this.baseUrl, DEFAULT_API_BASE_URL);
             WebTarget target = client.target(baseUrl);
 
             return new MusicBrainzJerseyClient(target);
+        }
+
+        @NotNull
+        private static <T> T getOrDefault(@Nullable T first, @NotNull T second) {
+            if (first != null) {
+                return first;
+            }
+
+            return second;
         }
 
     }
