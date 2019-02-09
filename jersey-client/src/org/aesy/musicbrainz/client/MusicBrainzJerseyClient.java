@@ -8,9 +8,26 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Feature;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public final class MusicBrainzJerseyClient
     implements MusicBrainzClient {
+
+    @NotNull
+    private static final String APPLICATION_NAME;
+
+    @NotNull
+    private static final String VERSION;
+
+    @NotNull
+    private static final String URL;
+
+    static {
+        APPLICATION_NAME = "musicbrainz-api-client";
+        VERSION = "1.0.0-SNAPSHOT";
+        URL = "https://github.com/aesy/musicbrainz-api-client";
+    }
 
     @NotNull
     private final MusicBrainzAreaEndpoint area;
@@ -150,10 +167,22 @@ public final class MusicBrainzJerseyClient
 
     public static final class Builder {
 
-        private static final String DEFAULT_API_BASE_URL = "https://musicbrainz.org/ws/2";
+        @NotNull
+        private static final String DEFAULT_API_BASE_URL;
+
+        @NotNull
+        private static final String DEFAULT_USER_AGENT;
+
+        static {
+            DEFAULT_API_BASE_URL = "https://musicbrainz.org/ws/2";
+            DEFAULT_USER_AGENT = String.format("%s/%s (%s)", APPLICATION_NAME, VERSION, URL);
+        }
 
         @Nullable
         private String baseUrl;
+
+        @Nullable
+        private String userAgent;
 
         @Nullable
         private String username;
@@ -177,6 +206,31 @@ public final class MusicBrainzJerseyClient
         }
 
         @NotNull
+        public Builder userAgent(@NotNull String userAgent) {
+            this.userAgent = userAgent;
+
+            return this;
+        }
+
+        @NotNull
+        public Builder userAgent(@NotNull String applciation, @NotNull String version) {
+            this.userAgent = String.format("%s/%s", applciation, version);
+
+            return this;
+        }
+
+        @NotNull
+        public Builder userAgent(
+            @NotNull String applciation,
+            @NotNull String version,
+            @NotNull String url
+        ) {
+            this.userAgent = String.format("%s/%s (%s)", applciation, version, url);
+
+            return this;
+        }
+
+        @NotNull
         public Builder authentication(@NotNull String username, @NotNull String password) {
             this.username = username;
             this.password = password;
@@ -187,6 +241,16 @@ public final class MusicBrainzJerseyClient
         @NotNull
         public MusicBrainzClient build() {
             Client client = ClientBuilder.newClient();
+
+            String userAgent;
+
+            if (this.userAgent != null) {
+                userAgent = this.userAgent;
+            } else {
+                userAgent = DEFAULT_USER_AGENT;
+            }
+
+            client.register(new JerseyClientUserAgentFilter(userAgent));
 
             if (username != null && password != null) {
                 Feature auth = HttpAuthenticationFeature.digest(username, password);
