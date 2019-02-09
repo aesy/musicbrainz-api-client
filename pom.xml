@@ -48,8 +48,9 @@
     </contributors>
 
     <modules>
-        <module>api-client</module>
-        <module>api-entities</module>
+        <module>api</module>
+        <module>jersey-client</module>
+        <module>entities</module>
     </modules>
 
     <build>

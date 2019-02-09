@@ -1,4 +1,4 @@
-package org.aesy.musicbrainz;
+package org.aesy.musicbrainz.client;
 
 import org.aesy.musicbrainz.exception.MusicBrainzException;
 import org.jetbrains.annotations.NotNull;
@@ -7,12 +7,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
-/* package-private */ abstract class BasicMusicBrainzResponse<T>
+/* package-private */ abstract class MusicBrainzResponseImpl<T>
     implements MusicBrainzResponse<T> {
 
     private final int statusCode;
 
-    private BasicMusicBrainzResponse(
+    protected MusicBrainzResponseImpl(
         int statusCode
     ) {
         this.statusCode = statusCode;
@@ -99,7 +99,7 @@ import java.util.function.Supplier;
     }
 
     /* package-private */ static final class Success<T>
-        extends BasicMusicBrainzResponse<T>
+        extends MusicBrainzResponseImpl<T>
         implements MusicBrainzResponse.Success<T> {
 
         @NotNull
@@ -120,7 +120,7 @@ import java.util.function.Supplier;
     }
 
     /* package-private */ static final class Failure<T>
-        extends BasicMusicBrainzResponse<T>
+        extends MusicBrainzResponseImpl<T>
         implements MusicBrainzResponse.Failure<T> {
 
         @NotNull
@@ -151,7 +151,7 @@ import java.util.function.Supplier;
     }
 
     /* package-private */ static final class Error<T>
-        extends BasicMusicBrainzResponse<T>
+        extends MusicBrainzResponseImpl<T>
         implements MusicBrainzResponse.Error<T> {
 
         @NotNull

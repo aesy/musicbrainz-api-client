@@ -1,16 +1,16 @@
-package org.aesy.musicbrainz;
+package org.aesy.musicbrainz.client;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Convenience adapter class which implements {@code BasicMusicBrainzRequest.Callback} with empty
+ * Convenience adapter class which implements {@code MusicBrainzLookupRequest.Callback} with empty
  * method bodies.
  *
  * @param <T> The entity type of the response
- * @see BasicMusicBrainzRequest.Callback
+ * @see MusicBrainzLookupRequest.Callback
  */
-public abstract class MusicBrainzRequestCallbackAdapter<T>
-    implements BasicMusicBrainzRequest.Callback<T> {
+public abstract class MusicBrainzLookupRequestCallbackAdapter<T>
+    implements MusicBrainzLookupRequest.Callback<T> {
 
     @Override
     public void onSuccess(@NotNull MusicBrainzResponse.Success<T> response) {

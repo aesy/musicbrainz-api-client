@@ -10,7 +10,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>musicbrainz-api-client-core</artifactId>
+    <artifactId>musicbrainz-api-jersey-client</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,14 +22,8 @@
 
         <dependency>
             <groupId>org.aesy.musicbrainz</groupId>
-            <artifactId>musicbrainz-api-entities</artifactId>
+            <artifactId>musicbrainz-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>17.0.0</version>
         </dependency>
 
         <dependency>

@@ -1,4 +1,4 @@
-package org.aesy.musicbrainz;
+package org.aesy.musicbrainz.client;
 
 import org.aesy.musicbrainz.exception.MusicBrainzException;
 import org.jetbrains.annotations.NotNull;
@@ -107,7 +107,8 @@ public interface MusicBrainzResponse<T> {
      * @throws E If there is no response entity present
      * @see MusicBrainzResponse#isSuccessful()
      */
-    @NotNull <E extends Throwable> T getOrThrow(@NotNull E throwable)
+    @NotNull
+    <E extends Throwable> T getOrThrow(@NotNull E throwable)
         throws E;
 
     /**
@@ -126,7 +127,8 @@ public interface MusicBrainzResponse<T> {
      * @throws E If there is no response entity present
      * @see MusicBrainzResponse#isSuccessful()
      */
-    @NotNull <E extends Throwable> T getOrThrow(@NotNull Supplier<E> supplier)
+    @NotNull
+    <E extends Throwable> T getOrThrow(@NotNull Supplier<E> supplier)
         throws E;
 
     /**

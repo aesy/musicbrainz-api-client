@@ -1,25 +1,15 @@
-package org.aesy.musicbrainz;
+package org.aesy.musicbrainz.client;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Represents an unsubmitted musicbrainz API request.
+ * Represents an unsubmitted musicbrainz API lookup request.
  *
  * @param <T> The entity type of the request.
  */
-public interface MusicBrainzRequest<T> {
-
-    /**
-     * Returns a new request which will map the response entity value using the giving function when
-     * the request is submitted.
-     *
-     * @param <R> The resulting type of the mapping function
-     * @param fn The mapping function
-     * @return The mapped request
-     */
-    @NotNull <R> MusicBrainzRequest<R> thenApply(@NotNull MusicBrainzResponseEntityMapper<T, R> fn);
+public interface MusicBrainzLookupRequest<T> {
 
     /**
      * Executes the request synchronously.
@@ -42,7 +32,7 @@ public interface MusicBrainzRequest<T> {
      * finished.
      *
      * @param callback An object containing callback functions
-     * @see MusicBrainzRequest.Callback
+     * @see MusicBrainzLookupRequest.Callback
      */
     void executeAsync(@NotNull Callback<T> callback);
 
