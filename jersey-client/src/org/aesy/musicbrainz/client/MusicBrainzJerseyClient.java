@@ -11,18 +11,128 @@ public final class MusicBrainzJerseyClient
     implements MusicBrainzClient {
 
     @NotNull
+    private final MusicBrainzAreaEndpoint area;
+
+    @NotNull
     private final MusicBrainzArtistEndpoint artist;
+
+    @NotNull
+    private final MusicBrainzEventEndpoint event;
+
+    @NotNull
+    private final MusicBrainzInstrumentEndpoint instrument;
+
+    @NotNull
+    private final MusicBrainzLabelEndpoint label;
+
+    @NotNull
+    private final MusicBrainzPlaceEndpoint place;
+
+    @NotNull
+    private final MusicBrainzRecordingEndpoint recording;
+
+    @NotNull
+    private final MusicBrainzReleaseEndpoint release;
+
+    @NotNull
+    private final MusicBrainzReleaseGroupEndpoint releaseGroup;
+
+    @NotNull
+    private final MusicBrainzSeriesEndpoint series;
+
+    @NotNull
+    private final MusicBrainzWorkEndpoint work;
+
+    @NotNull
+    private final MusicBrainzUrlEndpoint url;
 
     private MusicBrainzJerseyClient(
         @NotNull WebTarget target
     ) {
+        this.area = new MusicBrainzAreaEndpointImpl(target);
         this.artist = new MusicBrainzArtistEndpointImpl(target);
+        this.event = new MusicBrainzEventEndpointImpl(target);
+        this.instrument = new MusicBrainzInstrumentEndpointImpl(target);
+        this.label = new MusicBrainzLabelEndpointImpl(target);
+        this.place = new MusicBrainzPlaceEndpointImpl(target);
+        this.recording = new MusicBrainzRecordingEndpointImpl(target);
+        this.release = new MusicBrainzReleaseEndpointImpl(target);
+        this.releaseGroup = new MusicBrainzReleaseGroupEndpointImpl(target);
+        this.series = new MusicBrainzSeriesEndpointImpl(target);
+        this.work = new MusicBrainzWorkEndpointImpl(target);
+        this.url = new MusicBrainzUrlEndpointImpl(target);
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzAreaEndpoint area() {
+        return area;
     }
 
     @NotNull
     @Override
     public MusicBrainzArtistEndpoint artist() {
         return artist;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzEventEndpoint event() {
+        return event;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzInstrumentEndpoint instrument() {
+        return instrument;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzLabelEndpoint label() {
+        return label;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzPlaceEndpoint place() {
+        return place;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzRecordingEndpoint recording() {
+        return recording;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseEndpoint release() {
+        return release;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseGroupEndpoint releaseGroup() {
+        return releaseGroup;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzSeriesEndpoint series() {
+        return series;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzWorkEndpoint work() {
+        return work;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzUrlEndpoint url() {
+        return url;
     }
 
     @NotNull
