@@ -1,11 +1,13 @@
 package org.aesy.musicbrainz.client;
 
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Feature;
 
 public final class MusicBrainzJerseyClient
     implements MusicBrainzClient {
@@ -153,11 +155,31 @@ public final class MusicBrainzJerseyClient
         @Nullable
         private String baseUrl;
 
+        @Nullable
+        private String username;
+
+        @Nullable
+        private String password;
+
         private Builder() {}
 
         @NotNull
         public Builder baseUrl(@NotNull String baseUrl) {
+            try {
+                new URL(baseUrl);
+            } catch (MalformedURLException exception) {
+                throw new IllegalArgumentException("Invalid base URL", exception);
+            }
+
             this.baseUrl = baseUrl;
+
+            return this;
+        }
+
+        @NotNull
+        public Builder authentication(@NotNull String username, @NotNull String password) {
+            this.username = username;
+            this.password = password;
 
             return this;
         }
@@ -165,6 +187,12 @@ public final class MusicBrainzJerseyClient
         @NotNull
         public MusicBrainzClient build() {
             Client client = ClientBuilder.newClient();
+
+            if (username != null && password != null) {
+                Feature auth = HttpAuthenticationFeature.digest(username, password);
+
+                client.register(auth);
+            }
 
             String baseUrl;
 
