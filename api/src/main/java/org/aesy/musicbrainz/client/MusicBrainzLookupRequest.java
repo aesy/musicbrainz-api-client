@@ -1,5 +1,6 @@
 package org.aesy.musicbrainz.client;
 
+import org.aesy.musicbrainz.exception.MusicBrainzException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -43,47 +44,11 @@ public interface MusicBrainzLookupRequest<T> {
      */
     interface Callback<T> {
 
-        /**
-         * Called once after a successful request.
-         *
-         * <p>
-         * A request is considered successful when no exceptions has occured and the response status
-         * code is within range [200, 300).
-         * </p>
-         *
-         * @param response The response, whose entity value is guaranteed to be present
-         */
-        void onSuccess(@NotNull MusicBrainzResponse.Success<T> response);
+        void onSuccess(@NotNull T entity);
 
-        /**
-         * Called once after an unsuccessful request.
-         *
-         * <p>
-         * A request is considered unsuccessful when no exceptions occured, but the response status
-         * code is outside the range [200, 300).
-         * </p>
-         *
-         * @param response The response, whose entity value is guaranteed to not be present
-         */
-        void onFailure(@NotNull MusicBrainzResponse.Failure<T> response);
+        void onFailure(int statusCode, @NotNull String message);
 
-        /**
-         * Called once after an error occurred during a request.
-         *
-         * <p>
-         * An error is something unexpected, such as a missing internet connection or unparsable
-         * response body.
-         * </p>
-         *
-         * <p>
-         * The exception associated with this response should be a subclass of {@code
-         * MusicBrainzException}. If that's not the case, then it's considered a bug. Please submit
-         * the bug to our issue tracker.
-         * </p>
-         *
-         * @param response The response, whose entity value is guaranteed to not be present
-         */
-        void onError(@NotNull MusicBrainzResponse.Error<T> response);
+        void onError(@NotNull MusicBrainzException exception);
 
     }
 

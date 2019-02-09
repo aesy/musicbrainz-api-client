@@ -1,5 +1,6 @@
 package org.aesy.musicbrainz.client;
 
+import org.aesy.musicbrainz.exception.MusicBrainzException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,17 +14,17 @@ public abstract class MusicBrainzLookupRequestCallbackAdapter<T>
     implements MusicBrainzLookupRequest.Callback<T> {
 
     @Override
-    public void onSuccess(@NotNull MusicBrainzResponse.Success<T> response) {
+    public void onSuccess(@NotNull T entity) {
         // Intentionally left empty
     }
 
     @Override
-    public void onFailure(@NotNull MusicBrainzResponse.Failure<T> response) {
+    public void onFailure(int statusCode, @NotNull String message) {
         // Intentionally left empty
     }
 
     @Override
-    public void onError(@NotNull MusicBrainzResponse.Error<T> exception) {
+    public void onError(@NotNull MusicBrainzException exception) {
         // Intentionally left empty
     }
 

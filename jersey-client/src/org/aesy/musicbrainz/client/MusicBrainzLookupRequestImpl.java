@@ -60,11 +60,20 @@ import java.util.concurrent.CompletableFuture;
         executeAsync()
             .thenAccept(response -> {
                 if (response instanceof MusicBrainzResponse.Success) {
-                    callback.onSuccess((MusicBrainzResponse.Success<T>) response);
+                    T entity = response.get();
+
+                    callback.onSuccess(entity);
                 } else if (response instanceof MusicBrainzResponse.Failure) {
-                    callback.onFailure((MusicBrainzResponse.Failure<T>) response);
+                    MusicBrainzResponse.Failure failure = (MusicBrainzResponse.Failure<T>) response;
+                    int statusCode = failure.getStatusCode();
+                    String message = failure.getMessage();
+
+                    callback.onFailure(statusCode, message);
                 } else if (response instanceof MusicBrainzResponse.Error) {
-                    callback.onError((MusicBrainzResponse.Error<T>) response);
+                    MusicBrainzResponse.Error error = (MusicBrainzResponse.Error<T>) response;
+                    MusicBrainzException exception = error.getException();
+
+                    callback.onError(exception);
                 } else {
                     String message = "Unknown response type " + response.getClass();
                     MusicBrainzException exception = new MusicBrainzClientException(message);
