@@ -15,6 +15,12 @@ public final class MusicBrainzJerseyClient
     implements MusicBrainzClient {
 
     @NotNull
+    public static final String MUSICBRAINZ_API_URL;
+
+    @NotNull
+    public static final String MUSICBRAINZ_API_TEST_URL;
+
+    @NotNull
     private static final String APPLICATION_NAME;
 
     @NotNull
@@ -24,6 +30,8 @@ public final class MusicBrainzJerseyClient
     private static final String URL;
 
     static {
+        MUSICBRAINZ_API_URL = "https://musicbrainz.org/ws/2";
+        MUSICBRAINZ_API_TEST_URL = "https://test.musicbrainz.org/ws/2";
         APPLICATION_NAME = "musicbrainz-api-client";
         VERSION = "1.0.0-SNAPSHOT";
         URL = "https://github.com/aesy/musicbrainz-api-client";
@@ -178,7 +186,7 @@ public final class MusicBrainzJerseyClient
 
         static {
             DEFAULT_CLIENT = ClientBuilder.newClient();
-            DEFAULT_API_BASE_URL = "https://musicbrainz.org/ws/2";
+            DEFAULT_API_BASE_URL = MUSICBRAINZ_API_URL;
             DEFAULT_USER_AGENT = String.format("%s/%s (%s)", APPLICATION_NAME, VERSION, URL);
         }
 
