@@ -8,51 +8,36 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.Response;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.*;
 
 /* package-private */ abstract class MusicBrainzLookupRequestImpl<T>
-    implements MusicBrainzLookupRequest<T> {
+    implements MusicBrainzLookupRequest<T>, Callable<MusicBrainzResponse<T>> {
+
+    @NotNull
+    private static final Executor executor;
+
+    static {
+        executor = new RateLimitedExecutor(1, TimeUnit.SECONDS);
+    }
 
     protected MusicBrainzLookupRequestImpl() {}
 
     @NotNull
     @Override
     public MusicBrainzResponse<T> execute() {
-        Response response;
-
         try {
-            response = sendRequest();
-        } catch (MusicBrainzNetworkException exception) {
-            return new MusicBrainzResponseImpl.Error<>(exception);
+            return executeAsync().get();
+        } catch (InterruptedException | ExecutionException exception) {
+            MusicBrainzException wrappedException = new MusicBrainzClientException(exception);
+
+            return new MusicBrainzResponseImpl.Error<>(wrappedException);
         }
-
-        int statusCode = response.getStatus();
-
-        if (statusCode < 200 || statusCode >= 300) {
-            try {
-                String message = response.readEntity(String.class);
-
-                return new MusicBrainzResponseImpl.Failure<>(statusCode, message);
-            } catch (ProcessingException exception) {
-                return new MusicBrainzResponseImpl.Failure<>(statusCode);
-            }
-        }
-
-        T entity;
-
-        try {
-            entity = mapResponse(response);
-        } catch (MusicBrainzEntityMappingException exception) {
-            return new MusicBrainzResponseImpl.Error<>(exception);
-        }
-
-        return new MusicBrainzResponseImpl.Success<>(statusCode, entity);
     }
 
     @NotNull
     @Override
     public CompletableFuture<MusicBrainzResponse<T>> executeAsync() {
-        return CompletableFuture.supplyAsync(this::execute);
+        return CompletableFuture.supplyAsync(this::call, executor);
     }
 
     @Override
@@ -88,6 +73,40 @@ import java.util.concurrent.CompletableFuture;
 
                 return null;
             });
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzResponse<T> call() {
+        Response response;
+
+        try {
+            response = sendRequest();
+        } catch (MusicBrainzNetworkException exception) {
+            return new MusicBrainzResponseImpl.Error<>(exception);
+        }
+
+        int statusCode = response.getStatus();
+
+        if (statusCode < 200 || statusCode >= 300) {
+            try {
+                String message = response.readEntity(String.class);
+
+                return new MusicBrainzResponseImpl.Failure<>(statusCode, message);
+            } catch (ProcessingException exception) {
+                return new MusicBrainzResponseImpl.Failure<>(statusCode);
+            }
+        }
+
+        T entity;
+
+        try {
+            entity = mapResponse(response);
+        } catch (MusicBrainzEntityMappingException exception) {
+            return new MusicBrainzResponseImpl.Error<>(exception);
+        }
+
+        return new MusicBrainzResponseImpl.Success<>(statusCode, entity);
     }
 
     @NotNull
