@@ -1,6 +1,5 @@
 package org.aesy.musicbrainz.client;
 
-import org.aesy.musicbrainz.exception.MusicBrainzException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +17,7 @@ public interface MusicBrainzLookupRequest<T> {
      * @return The response
      */
     @NotNull
-    MusicBrainzResponse<T> execute();
+    MusicBrainzResponse<T> lookup();
 
     /**
      * Executes the request asynchronously.
@@ -26,30 +25,15 @@ public interface MusicBrainzLookupRequest<T> {
      * @return A future of a response
      */
     @NotNull
-    CompletableFuture<MusicBrainzResponse<T>> executeAsync();
+    CompletableFuture<MusicBrainzResponse<T>> lookupAsync();
 
     /**
      * Executes the request asynchronously and uses the given callbacks when the request is
      * finished.
      *
      * @param callback An object containing callback functions
-     * @see MusicBrainzLookupRequest.Callback
+     * @see MusicBrainzRequestCallback
      */
-    void executeAsync(@NotNull Callback<T> callback);
-
-    /**
-     * Request callbacks.
-     *
-     * @param <T> The response entity type
-     */
-    interface Callback<T> {
-
-        void onSuccess(@NotNull T entity);
-
-        void onFailure(int statusCode, @NotNull String message);
-
-        void onError(@NotNull MusicBrainzException exception);
-
-    }
+    void lookupAsync(@NotNull MusicBrainzRequestCallback<T> callback);
 
 }

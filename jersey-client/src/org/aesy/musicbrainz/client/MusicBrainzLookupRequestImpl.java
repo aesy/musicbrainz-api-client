@@ -22,13 +22,11 @@ import java.util.concurrent.*;
         this.executor = executor;
     }
 
-    protected MusicBrainzLookupRequestImpl() {}
-
     @NotNull
     @Override
-    public MusicBrainzResponse<T> execute() {
+    public MusicBrainzResponse<T> lookup() {
         try {
-            return executeAsync().get();
+            return lookupAsync().get();
         } catch (InterruptedException | ExecutionException exception) {
             MusicBrainzException wrappedException = new MusicBrainzClientException(exception);
 
@@ -38,13 +36,13 @@ import java.util.concurrent.*;
 
     @NotNull
     @Override
-    public CompletableFuture<MusicBrainzResponse<T>> executeAsync() {
+    public CompletableFuture<MusicBrainzResponse<T>> lookupAsync() {
         return CompletableFuture.supplyAsync(this::call, executor);
     }
 
     @Override
-    public void executeAsync(@NotNull Callback<T> callback) {
-        executeAsync()
+    public void lookupAsync(@NotNull MusicBrainzRequestCallback<T> callback) {
+        lookupAsync()
             .thenAccept(response -> {
                 if (response instanceof MusicBrainzResponse.Success) {
                     T entity = response.get();
