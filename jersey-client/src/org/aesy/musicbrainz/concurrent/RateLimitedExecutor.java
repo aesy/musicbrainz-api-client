@@ -1,4 +1,4 @@
-package org.aesy.musicbrainz.client;
+package org.aesy.musicbrainz.concurrent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/* package-private */ final class RateLimitedExecutor
+public class RateLimitedExecutor
     implements Executor, Runnable {
 
     @NotNull
@@ -29,11 +29,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
     private long lastRun;
 
-    /* package-private */ RateLimitedExecutor(
+    public RateLimitedExecutor(
         double runs,
         @NotNull TimeUnit unit
     ) {
-        this.threadFactory = new DeamonThreadFactory(getClass().getSimpleName());
+        this(runs, unit, RateLimitedExecutor.class.getSimpleName());
+    }
+
+    public RateLimitedExecutor(
+        double runs,
+        @NotNull TimeUnit unit,
+        @NotNull String namePrefix
+    ) {
+        this.threadFactory = new DeamonThreadFactory(namePrefix);
         this.runnables = new ConcurrentLinkedDeque<>();
         this.queueExecutor = new ThreadPoolExecutor(
             0, 1, 1L, TimeUnit.SECONDS,

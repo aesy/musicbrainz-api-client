@@ -8,10 +8,10 @@ import org.jetbrains.annotations.NotNull;
  * method bodies.
  *
  * @param <T> The entity type of the response
- * @see MusicBrainzLookupRequest.Callback
+ * @see MusicBrainzRequestCallback
  */
 public abstract class MusicBrainzLookupRequestCallbackAdapter<T>
-    implements MusicBrainzLookupRequest.Callback<T> {
+    implements MusicBrainzRequestCallback<T> {
 
     @Override
     public void onSuccess(@NotNull T entity) {

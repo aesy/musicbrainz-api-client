@@ -14,10 +14,12 @@ import java.util.concurrent.*;
     implements MusicBrainzLookupRequest<T>, Callable<MusicBrainzResponse<T>> {
 
     @NotNull
-    private static final Executor executor;
+    private final Executor executor;
 
-    static {
-        executor = new RateLimitedExecutor(1, TimeUnit.SECONDS);
+    protected MusicBrainzLookupRequestImpl(
+        @NotNull Executor executor
+    ) {
+        this.executor = executor;
     }
 
     protected MusicBrainzLookupRequestImpl() {}

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 
 /* package-private */ final class MusicBrainzArtistLookupRequestImpl
     extends MusicBrainzLookupRequestImpl<Artist>
@@ -31,9 +32,11 @@ import java.util.UUID;
 
     /* package-private */ MusicBrainzArtistLookupRequestImpl(
         @NotNull WebTarget target,
+        @NotNull Executor executor,
         @NotNull UUID id
     ) {
-        super();
+        super(executor);
+
         this.target = target;
         this.id = id;
         this.includes = new ArrayList<>();

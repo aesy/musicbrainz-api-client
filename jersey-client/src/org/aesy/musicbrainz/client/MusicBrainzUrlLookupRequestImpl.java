@@ -12,6 +12,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 
 /* package-private */ final class MusicBrainzUrlLookupRequestImpl
     extends MusicBrainzLookupRequestImpl<Url>
@@ -25,8 +26,11 @@ import java.util.UUID;
 
     /* package-private */ MusicBrainzUrlLookupRequestImpl(
         @NotNull WebTarget target,
+        @NotNull Executor executor,
         @NotNull UUID id
     ) {
+        super(executor);
+
         this.target = target;
         this.id = id;
     }

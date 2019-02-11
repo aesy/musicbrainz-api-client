@@ -1,5 +1,6 @@
 package org.aesy.musicbrainz.client;
 
+import org.aesy.musicbrainz.concurrent.RateLimitedExecutor;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +11,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Feature;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 public final class MusicBrainzJerseyClient
     implements MusicBrainzClient {
@@ -74,20 +77,21 @@ public final class MusicBrainzJerseyClient
     private final MusicBrainzUrlEndpoint url;
 
     private MusicBrainzJerseyClient(
-        @NotNull WebTarget target
+        @NotNull WebTarget target,
+        @NotNull Executor executor
     ) {
-        this.area = new MusicBrainzAreaEndpointImpl(target);
-        this.artist = new MusicBrainzArtistEndpointImpl(target);
-        this.event = new MusicBrainzEventEndpointImpl(target);
-        this.instrument = new MusicBrainzInstrumentEndpointImpl(target);
-        this.label = new MusicBrainzLabelEndpointImpl(target);
-        this.place = new MusicBrainzPlaceEndpointImpl(target);
-        this.recording = new MusicBrainzRecordingEndpointImpl(target);
-        this.release = new MusicBrainzReleaseEndpointImpl(target);
-        this.releaseGroup = new MusicBrainzReleaseGroupEndpointImpl(target);
-        this.series = new MusicBrainzSeriesEndpointImpl(target);
-        this.work = new MusicBrainzWorkEndpointImpl(target);
-        this.url = new MusicBrainzUrlEndpointImpl(target);
+        this.area = new MusicBrainzAreaEndpointImpl(target, executor);
+        this.artist = new MusicBrainzArtistEndpointImpl(target, executor);
+        this.event = new MusicBrainzEventEndpointImpl(target, executor);
+        this.instrument = new MusicBrainzInstrumentEndpointImpl(target, executor);
+        this.label = new MusicBrainzLabelEndpointImpl(target, executor);
+        this.place = new MusicBrainzPlaceEndpointImpl(target, executor);
+        this.recording = new MusicBrainzRecordingEndpointImpl(target, executor);
+        this.release = new MusicBrainzReleaseEndpointImpl(target, executor);
+        this.releaseGroup = new MusicBrainzReleaseGroupEndpointImpl(target, executor);
+        this.series = new MusicBrainzSeriesEndpointImpl(target, executor);
+        this.work = new MusicBrainzWorkEndpointImpl(target, executor);
+        this.url = new MusicBrainzUrlEndpointImpl(target, executor);
     }
 
     @NotNull
@@ -176,7 +180,7 @@ public final class MusicBrainzJerseyClient
     public static final class Builder {
 
         @NotNull
-        private static final Client DEFAULT_CLIENT;
+        private static final Factory<Client> DEFAULT_CLIENT_FACTORY;
 
         @NotNull
         private static final String DEFAULT_API_BASE_URL;
@@ -184,14 +188,19 @@ public final class MusicBrainzJerseyClient
         @NotNull
         private static final String DEFAULT_USER_AGENT;
 
+        @NotNull
+        private static final Factory<Executor> DEFAULT_EXECUTOR_FACTORY;
+
         static {
-            DEFAULT_CLIENT = ClientBuilder.newClient();
+            DEFAULT_CLIENT_FACTORY = ClientBuilder::newClient;
             DEFAULT_API_BASE_URL = MUSICBRAINZ_API_URL;
             DEFAULT_USER_AGENT = String.format("%s/%s (%s)", APPLICATION_NAME, VERSION, URL);
+            DEFAULT_EXECUTOR_FACTORY = () -> new RateLimitedExecutor(
+                1, TimeUnit.SECONDS, "musicbrainz-api-client");
         }
 
         @Nullable
-        private Client client;
+        private Factory<Client> clientFactory;
 
         @Nullable
         private String baseUrl;
@@ -205,11 +214,14 @@ public final class MusicBrainzJerseyClient
         @Nullable
         private String password;
 
+        @Nullable
+        private Factory<Executor> executorFactory;
+
         private Builder() {}
 
         @NotNull
         public Builder client(@NotNull Client client) {
-            this.client = client;
+            this.clientFactory = () -> client;
 
             return this;
         }
@@ -261,9 +273,17 @@ public final class MusicBrainzJerseyClient
         }
 
         @NotNull
+        public Builder executor(@NotNull Executor executor) {
+            this.executorFactory = () -> executor;
+
+            return this;
+        }
+
+        @NotNull
         public MusicBrainzClient build() {
-            Client client = getOrDefault(this.client, DEFAULT_CLIENT);
-            String userAgent = getOrDefault(this.userAgent, DEFAULT_USER_AGENT);
+            String userAgent = Utils.getOrDefault(this.userAgent, DEFAULT_USER_AGENT);
+            Client client = Utils.getOrDefault(this.clientFactory, DEFAULT_CLIENT_FACTORY)
+                                 .create();
 
             client.register(new JerseyClientUserAgentFilter(userAgent));
 
@@ -273,19 +293,12 @@ public final class MusicBrainzJerseyClient
                 client.register(auth);
             }
 
-            String baseUrl = getOrDefault(this.baseUrl, DEFAULT_API_BASE_URL);
+            String baseUrl = Utils.getOrDefault(this.baseUrl, DEFAULT_API_BASE_URL);
             WebTarget target = client.target(baseUrl);
+            Executor executor = Utils.getOrDefault(this.executorFactory, DEFAULT_EXECUTOR_FACTORY)
+                                     .create();
 
-            return new MusicBrainzJerseyClient(target);
-        }
-
-        @NotNull
-        private static <T> T getOrDefault(@Nullable T first, @NotNull T second) {
-            if (first != null) {
-                return first;
-            }
-
-            return second;
+            return new MusicBrainzJerseyClient(target, executor);
         }
 
     }
