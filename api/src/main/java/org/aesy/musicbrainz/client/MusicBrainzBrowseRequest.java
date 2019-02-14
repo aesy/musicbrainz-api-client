@@ -8,27 +8,21 @@ import java.util.concurrent.CompletableFuture;
 public interface MusicBrainzBrowseRequest<T> {
 
     @NotNull
-    MusicBrainzResponse<List<T>> browse(long limit);
+    MusicBrainzBrowseRequest<T> limitBy(long limit);
 
     @NotNull
-    MusicBrainzResponse<List<T>> browse(long limit, long offset);
+    MusicBrainzBrowseRequest<T> offsetBy(long offset);
 
     @NotNull
-    CompletableFuture<MusicBrainzResponse<List<T>>> browseAsync(long limit);
+    MusicBrainzResponse<List<T>> browse();
 
     @NotNull
-    void browseAsync(long limit, @NotNull MusicBrainzRequestCallback<List<T>> callback);
+    CompletableFuture<MusicBrainzResponse<List<T>>> browseAsync();
 
     @NotNull
-    CompletableFuture<MusicBrainzResponse<List<T>>> browseAsync(long limit, long offset);
+    void browseAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback);
 
     @NotNull
-    void browseAsync(long limit, long offset, @NotNull MusicBrainzRequestCallback<List<T>> callback);
-
-    @NotNull
-    MusicBrainzResponse<List<T>> browseAll();
-
-    @NotNull
-    void browseAllAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback);
+    void browseChunksAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback);
 
 }

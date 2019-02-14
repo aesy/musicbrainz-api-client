@@ -9,4 +9,10 @@ public interface MusicBrainzUrlEndpoint {
     @NotNull
     MusicBrainzUrlLookupRequest withId(@NotNull UUID id);
 
+    // @NotNull
+    // MusicBrainzUrlBrowseRequest withResource(@NotNull Resource resource);
+
+    // @NotNull
+    // MusicBrainzUrlBrowseRequest withResourceId(@NotNull UUID id);
+
 }
