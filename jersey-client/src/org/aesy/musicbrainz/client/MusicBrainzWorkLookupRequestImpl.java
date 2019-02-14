@@ -40,9 +40,8 @@ import java.util.concurrent.Executor;
     protected Response sendRequest()
         throws MusicBrainzNetworkException {
 
-        WebTarget target = this.target.path(id.toString());
-
         Invocation invocation = target
+            .path(id.toString())
             .request()
             .accept(MediaType.APPLICATION_XML)
             .buildGet();

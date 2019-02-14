@@ -4,13 +4,13 @@ import org.aesy.musicbrainz.exception.MusicBrainzException;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Convenience adapter class which implements {@code MusicBrainzLookupRequest.Callback} with empty
+ * Convenience adapter class which implements {@code MusicBrainzRequestCallback} with empty
  * method bodies.
  *
  * @param <T> The entity type of the response
  * @see MusicBrainzRequestCallback
  */
-public abstract class MusicBrainzLookupRequestCallbackAdapter<T>
+public abstract class MusicBrainzRequestCallbackAdapter<T>
     implements MusicBrainzRequestCallback<T> {
 
     @Override

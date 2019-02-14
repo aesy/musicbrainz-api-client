@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 import java.util.concurrent.*;
 
 /* package-private */ abstract class MusicBrainzLookupRequestImpl<T>
-    implements MusicBrainzLookupRequest<T>, Callable<MusicBrainzResponse<T>> {
+    implements MusicBrainzLookupRequest<T> {
 
     @NotNull
     private final Executor executor;
@@ -37,7 +37,7 @@ import java.util.concurrent.*;
     @NotNull
     @Override
     public CompletableFuture<MusicBrainzResponse<T>> lookupAsync() {
-        return CompletableFuture.supplyAsync(this::call, executor);
+        return CompletableFuture.supplyAsync(this::doLookup, executor);
     }
 
     @Override
@@ -49,13 +49,13 @@ import java.util.concurrent.*;
 
                     callback.onSuccess(entity);
                 } else if (response instanceof MusicBrainzResponse.Failure) {
-                    MusicBrainzResponse.Failure failure = (MusicBrainzResponse.Failure<T>) response;
+                    MusicBrainzResponse.Failure failure = (MusicBrainzResponse.Failure) response;
                     int statusCode = failure.getStatusCode();
                     String message = failure.getMessage();
 
                     callback.onFailure(statusCode, message);
                 } else if (response instanceof MusicBrainzResponse.Error) {
-                    MusicBrainzResponse.Error error = (MusicBrainzResponse.Error<T>) response;
+                    MusicBrainzResponse.Error error = (MusicBrainzResponse.Error) response;
                     MusicBrainzException exception = error.getException();
 
                     callback.onError(exception);
@@ -76,8 +76,7 @@ import java.util.concurrent.*;
     }
 
     @NotNull
-    @Override
-    public MusicBrainzResponse<T> call() {
+    private MusicBrainzResponse<T> doLookup() {
         Response response;
 
         try {
