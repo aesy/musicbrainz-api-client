@@ -1,5 +1,6 @@
 package org.aesy.musicbrainz.client;
 
+import org.aesy.musicbrainz.entity.Collection;
 import org.jetbrains.annotations.NotNull;
 
 import javax.ws.rs.client.WebTarget;
@@ -30,6 +31,18 @@ import java.util.concurrent.Executor;
     @Override
     public MusicBrainzAreaLookupRequest withId(@NotNull UUID id) {
         return new MusicBrainzAreaLookupRequestImpl(target, executor, id);
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzAreaBrowseRequest withCollection(@NotNull Collection collection) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzAreaBrowseRequest withCollectionId(@NotNull UUID id) {
+        throw new RuntimeException("Not implemented");
     }
 
 }

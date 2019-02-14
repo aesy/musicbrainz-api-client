@@ -1,5 +1,8 @@
 package org.aesy.musicbrainz.client;
 
+import org.aesy.musicbrainz.entity.Artist;
+import org.aesy.musicbrainz.entity.Collection;
+import org.aesy.musicbrainz.entity.Release;
 import org.jetbrains.annotations.NotNull;
 
 import javax.ws.rs.client.WebTarget;
@@ -30,6 +33,42 @@ import java.util.concurrent.Executor;
     @Override
     public MusicBrainzReleaseGroupLookupRequest withId(@NotNull UUID id) {
         return new MusicBrainzReleaseGroupLookupRequestImpl(target, executor, id);
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseGroupBrowseRequest withArtist(@NotNull Artist artist) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseGroupBrowseRequest withArtistId(@NotNull UUID id) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseGroupBrowseRequest withCollection(@NotNull Collection collection) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseGroupBrowseRequest withCollectionId(@NotNull UUID id) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseGroupBrowseRequest withRelease(@NotNull Release release) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzReleaseGroupBrowseRequest withReleaseId(@NotNull UUID id) {
+        throw new RuntimeException("Not implemented");
     }
 
 }

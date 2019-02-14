@@ -1,5 +1,8 @@
 package org.aesy.musicbrainz.client;
 
+import org.aesy.musicbrainz.entity.Collection;
+import org.aesy.musicbrainz.entity.DefAreaElementInner;
+import org.aesy.musicbrainz.entity.Release;
 import org.jetbrains.annotations.NotNull;
 
 import javax.ws.rs.client.WebTarget;
@@ -30,6 +33,42 @@ import java.util.concurrent.Executor;
     @Override
     public MusicBrainzLabelLookupRequest withId(@NotNull UUID id) {
         return new MusicBrainzLabelLookupRequestImpl(target, executor, id);
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzLabelBrowseRequest withArea(@NotNull DefAreaElementInner area) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzLabelBrowseRequest withAreaId(@NotNull UUID id) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzLabelBrowseRequest withCollection(@NotNull Collection collection) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzLabelBrowseRequest withCollectionId(@NotNull UUID id) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzLabelBrowseRequest withRelease(@NotNull Release release) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzLabelBrowseRequest withReleaseId(@NotNull UUID id) {
+        throw new RuntimeException("Not implemented");
     }
 
 }
