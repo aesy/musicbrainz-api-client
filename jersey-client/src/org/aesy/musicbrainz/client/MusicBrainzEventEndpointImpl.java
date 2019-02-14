@@ -39,49 +39,57 @@ import java.util.concurrent.Executor;
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withArea(@NotNull DefAreaElementInner area) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(area.getId());
+
+        return withAreaId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withAreaId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzEventBrowseRequestImpl(target, executor, "area", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withArtist(@NotNull Artist artist) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(artist.getId());
+
+        return withArtistId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withArtistId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzEventBrowseRequestImpl(target, executor, "artist", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withCollection(@NotNull Collection collection) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(collection.getId());
+
+        return withCollectionId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withCollectionId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzEventBrowseRequestImpl(target, executor, "collection", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withPlace(@NotNull Place place) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(place.getId());
+
+        return withPlaceId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzEventBrowseRequest withPlaceId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzEventBrowseRequestImpl(target, executor, "place", id);
     }
 
 }

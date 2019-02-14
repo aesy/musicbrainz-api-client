@@ -37,25 +37,29 @@ import java.util.concurrent.Executor;
     @NotNull
     @Override
     public MusicBrainzPlaceBrowseRequest withArea(@NotNull DefAreaElementInner area) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(area.getId());
+
+        return withAreaId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzPlaceBrowseRequest withAreaId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzPlaceBrowseRequestImpl(target, executor, "area", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzPlaceBrowseRequest withCollection(@NotNull Collection collection) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(collection.getId());
+
+        return withCollectionId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzPlaceBrowseRequest withCollectionId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzPlaceBrowseRequestImpl(target, executor, "collection", id);
     }
 
 }

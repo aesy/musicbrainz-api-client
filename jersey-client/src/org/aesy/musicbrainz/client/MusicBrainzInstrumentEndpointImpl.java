@@ -36,13 +36,15 @@ import java.util.concurrent.Executor;
     @NotNull
     @Override
     public MusicBrainzInstrumentBrowseRequest withCollection(@NotNull Collection collection) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(collection.getId());
+
+        return withCollectionId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzInstrumentBrowseRequest withCollectionId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzInstrumentBrowseRequestImpl(target, executor, "collection", id);
     }
 
 }

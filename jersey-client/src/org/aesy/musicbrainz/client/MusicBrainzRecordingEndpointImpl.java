@@ -38,37 +38,43 @@ import java.util.concurrent.Executor;
     @NotNull
     @Override
     public MusicBrainzRecordingBrowseRequest withArtist(@NotNull Artist artist) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(artist.getId());
+
+        return withArtistId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzRecordingBrowseRequest withArtistId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzRecordingBrowseRequestImpl(target, executor, "artist", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzRecordingBrowseRequest withCollection(@NotNull Collection collection) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(collection.getId());
+
+        return withCollectionId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzRecordingBrowseRequest withCollectionId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzRecordingBrowseRequestImpl(target, executor, "collection", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzRecordingBrowseRequest withRelease(@NotNull Release release) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(release.getId());
+
+        return withReleaseId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzRecordingBrowseRequest withReleaseId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzRecordingBrowseRequestImpl(target, executor, "release", id);
     }
 
 }

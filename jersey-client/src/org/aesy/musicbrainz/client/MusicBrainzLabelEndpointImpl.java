@@ -38,37 +38,43 @@ import java.util.concurrent.Executor;
     @NotNull
     @Override
     public MusicBrainzLabelBrowseRequest withArea(@NotNull DefAreaElementInner area) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(area.getId());
+
+        return withAreaId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzLabelBrowseRequest withAreaId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzLabelBrowseRequestImpl(target, executor, "area", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzLabelBrowseRequest withCollection(@NotNull Collection collection) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(collection.getId());
+
+        return withCollectionId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzLabelBrowseRequest withCollectionId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzLabelBrowseRequestImpl(target, executor, "collection", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzLabelBrowseRequest withRelease(@NotNull Release release) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(release.getId());
+
+        return withReleaseId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzLabelBrowseRequest withReleaseId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzLabelBrowseRequestImpl(target, executor, "release", id);
     }
 
 }

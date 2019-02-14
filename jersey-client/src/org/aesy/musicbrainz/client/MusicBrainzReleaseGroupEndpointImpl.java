@@ -38,37 +38,43 @@ import java.util.concurrent.Executor;
     @NotNull
     @Override
     public MusicBrainzReleaseGroupBrowseRequest withArtist(@NotNull Artist artist) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(artist.getId());
+
+        return withArtistId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzReleaseGroupBrowseRequest withArtistId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzReleaseGroupBrowseRequestImpl(target, executor, "artist", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzReleaseGroupBrowseRequest withCollection(@NotNull Collection collection) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(collection.getId());
+
+        return withCollectionId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzReleaseGroupBrowseRequest withCollectionId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzReleaseGroupBrowseRequestImpl(target, executor, "collection", id);
     }
 
     @NotNull
     @Override
     public MusicBrainzReleaseGroupBrowseRequest withRelease(@NotNull Release release) {
-        throw new RuntimeException("Not implemented");
+        UUID id = UUID.fromString(release.getId());
+
+        return withReleaseId(id);
     }
 
     @NotNull
     @Override
     public MusicBrainzReleaseGroupBrowseRequest withReleaseId(@NotNull UUID id) {
-        throw new RuntimeException("Not implemented");
+        return new MusicBrainzReleaseGroupBrowseRequestImpl(target, executor, "release", id);
     }
 
 }
