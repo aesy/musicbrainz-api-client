@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Made to work as a payload for all types of requests -->
+<metadata xmlns="http://musicbrainz.org/ns/mmd-2.0#">
+    <artist />
+    <artist-list />
+    <area />
+    <area-list />
+    <event />
+    <event-list />
+    <instrument />
+    <instrument-list />
+    <label />
+    <label-list />
+    <place />
+    <place-list />
+    <recording />
+    <recording-list />
+    <release />
+    <release-list />
+    <release-group />
+    <release-group-list />
+    <series />
+    <series-list />
+    <url />
+    <url-list />
+    <work />
+    <work-list />
+</metadata>
