@@ -3,8 +3,6 @@ package org.aesy.musicbrainz.util;
 import io.specto.hoverfly.junit.dsl.RequestMatcherBuilder;
 import io.specto.hoverfly.junit5.HoverflyExtension;
 import org.aesy.musicbrainz.client.MusicBrainzClient;
-import org.assertj.core.api.WithAssertions;
-import org.assertj.core.api.WithAssumptions;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
@@ -17,8 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @ExtendWith(HoverflyExtension.class)
-public abstract class MusicBrainzClientTest
-    implements WithAssertions, WithAssumptions {
+public abstract class MusicBrainzClientTest {
 
     public String resource(String name) {
         URL resource = getClass().getClassLoader().getResource(name);

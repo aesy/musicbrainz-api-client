@@ -50,7 +50,7 @@ public class RateLimitedExecutor
             0, Integer.MAX_VALUE, 1L, TimeUnit.SECONDS,
             new SynchronousQueue<>(), this.threadFactory, new ThreadPoolExecutor.AbortPolicy());
         this.isRunning = new AtomicBoolean(false);
-        this.millisecondsBetweenRuns = (long) (runs * TimeUnit.MILLISECONDS.convert(1, unit));
+        this.millisecondsBetweenRuns = (long) (TimeUnit.MILLISECONDS.convert(1, unit) / runs);
     }
 
     @Override

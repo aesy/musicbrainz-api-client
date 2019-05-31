@@ -9,7 +9,6 @@ import org.aesy.musicbrainz.client.MusicBrainzJerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 
 import javax.ws.rs.client.Client;
 import java.util.concurrent.Executor;
@@ -18,9 +17,9 @@ import java.util.concurrent.Executors;
 import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 
-@Tag("UnitTest")
 public abstract class MusicBrainzClientUnitTest
-    extends MusicBrainzClientTest {
+    extends MusicBrainzClientTest
+    implements UnitTest {
 
     private Hoverfly hoverfly;
 
