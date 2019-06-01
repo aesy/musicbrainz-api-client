@@ -48,7 +48,6 @@ import java.util.concurrent.Executor;
         throws MusicBrainzNetworkException {
 
         Invocation invocation = target
-            .path("area")
             .queryParam(subQuery, id.toString())
             .queryParam("limit", limit)
             .queryParam("offset", offset)
