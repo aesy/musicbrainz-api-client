@@ -7,6 +7,15 @@ public interface MusicBrainzArtistLookupRequest
     extends MusicBrainzLookupRequest<Artist> {
 
     @NotNull
-    MusicBrainzArtistLookupRequest include(@NotNull String... include);
+    MusicBrainzArtistLookupRequest includeRecordings();
+
+    @NotNull
+    MusicBrainzArtistLookupRequest includeReleases();
+
+    @NotNull
+    MusicBrainzArtistLookupRequest includeReleaseGroups();
+
+    @NotNull
+    MusicBrainzArtistLookupRequest includeWorks();
 
 }

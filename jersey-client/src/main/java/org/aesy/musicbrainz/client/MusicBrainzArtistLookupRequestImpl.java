@@ -12,7 +12,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executor;
@@ -44,8 +43,32 @@ import java.util.concurrent.Executor;
 
     @NotNull
     @Override
-    public MusicBrainzArtistLookupRequest include(@NotNull String... includes) {
-        Collections.addAll(this.includes, includes);
+    public MusicBrainzArtistLookupRequest includeRecordings() {
+        includes.add("recordings");
+
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzArtistLookupRequest includeReleases() {
+        includes.add("releases");
+
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzArtistLookupRequest includeReleaseGroups() {
+        includes.add("release-groups");
+
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzArtistLookupRequest includeWorks() {
+        includes.add("works");
 
         return this;
     }

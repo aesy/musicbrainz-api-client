@@ -44,13 +44,6 @@ import java.util.concurrent.Executor;
 
     @NotNull
     @Override
-    public MusicBrainzRecordingBrowseRequest include(@NotNull String... include) {
-        // TODO
-        throw new RuntimeException("Not implemented");
-    }
-
-    @NotNull
-    @Override
     protected Response sendRequest(long limit, long offset)
         throws MusicBrainzNetworkException {
 

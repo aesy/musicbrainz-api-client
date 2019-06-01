@@ -11,6 +11,8 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 
@@ -24,6 +26,9 @@ import java.util.concurrent.Executor;
     @NotNull
     private final UUID id;
 
+    @NotNull
+    private final List<String> includes;
+
     /* package-private */ MusicBrainzRecordingLookupRequestImpl(
         @NotNull WebTarget target,
         @NotNull Executor executor,
@@ -33,6 +38,23 @@ import java.util.concurrent.Executor;
 
         this.target = target;
         this.id = id;
+        this.includes = new ArrayList<>();
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzRecordingLookupRequest includeArtists() {
+        includes.add("artists");
+
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzRecordingLookupRequest includeReleases() {
+        includes.add("releases");
+
+        return this;
     }
 
     @NotNull
@@ -40,8 +62,13 @@ import java.util.concurrent.Executor;
     protected Response sendRequest()
         throws MusicBrainzNetworkException {
 
+        WebTarget target = this.target.path(id.toString());
+
+        if (!includes.isEmpty()) {
+            target = target.queryParam("inc", String.join("+", includes));
+        }
+
         Invocation invocation = target
-            .path(id.toString())
             .request()
             .accept(MediaType.APPLICATION_XML)
             .buildGet();
