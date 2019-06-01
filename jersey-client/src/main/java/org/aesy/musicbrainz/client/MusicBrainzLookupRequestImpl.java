@@ -43,36 +43,7 @@ import java.util.concurrent.*;
     @Override
     public void lookupAsync(@NotNull MusicBrainzRequestCallback<T> callback) {
         lookupAsync()
-            .thenAccept(response -> {
-                if (response instanceof MusicBrainzResponse.Success) {
-                    T entity = response.get();
-
-                    callback.onSuccess(entity);
-                } else if (response instanceof MusicBrainzResponse.Failure) {
-                    MusicBrainzResponse.Failure failure = (MusicBrainzResponse.Failure) response;
-                    int statusCode = failure.getStatusCode();
-                    String message = failure.getMessage();
-
-                    callback.onFailure(statusCode, message);
-                } else if (response instanceof MusicBrainzResponse.Error) {
-                    MusicBrainzResponse.Error error = (MusicBrainzResponse.Error) response;
-                    MusicBrainzException exception = error.getException();
-
-                    callback.onError(exception);
-                } else {
-                    String message = "Unknown response type " + response.getClass();
-                    MusicBrainzException exception = new MusicBrainzClientException(message);
-
-                    callback.onError(exception);
-                }
-            })
-            .exceptionally(throwable -> {
-                MusicBrainzException exception = new MusicBrainzClientException(throwable);
-
-                callback.onError(exception);
-
-                return null;
-            });
+            .handleAsync(new MusicBrainzResponseCallbackHandler<>(callback));
     }
 
     @NotNull
