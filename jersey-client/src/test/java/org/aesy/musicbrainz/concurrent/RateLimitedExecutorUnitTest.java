@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RateLimitedExecutorUnitTest
-    implements UnitTest {
+    extends UnitTest {
 
     @Test
     @DisplayName("Rate limiting")

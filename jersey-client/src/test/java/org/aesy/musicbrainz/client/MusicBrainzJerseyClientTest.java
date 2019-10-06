@@ -1,7 +1,7 @@
 package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
-import org.aesy.musicbrainz.util.MusicBrainzClientUnitTest;
+import org.aesy.musicbrainz.util.UnitTest;
 import org.aesy.musicbrainz.util.Simulation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
 public class MusicBrainzJerseyClientTest
-    extends MusicBrainzClientUnitTest {
+    extends UnitTest {
 
     @Test
     @DisplayName("Custom user agent")

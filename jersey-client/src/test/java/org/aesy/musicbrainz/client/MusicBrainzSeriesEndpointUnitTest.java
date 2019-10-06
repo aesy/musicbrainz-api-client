@@ -2,7 +2,7 @@ package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
 import org.aesy.musicbrainz.entity.Series;
-import org.aesy.musicbrainz.util.MusicBrainzClientUnitTest;
+import org.aesy.musicbrainz.util.UnitTest;
 import org.aesy.musicbrainz.util.Simulation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ import java.util.UUID;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
 public class MusicBrainzSeriesEndpointUnitTest
-    extends MusicBrainzClientUnitTest {
+    extends UnitTest {
 
     private MusicBrainzSeriesEndpoint endpoint;
 

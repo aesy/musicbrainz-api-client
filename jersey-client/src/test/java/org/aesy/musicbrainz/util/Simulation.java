@@ -7,4 +7,5 @@ public interface Simulation extends AutoCloseable {
     default void close() {
         verify();
     }
+
 }
