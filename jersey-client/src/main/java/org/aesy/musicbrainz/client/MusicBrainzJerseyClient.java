@@ -248,19 +248,19 @@ public final class MusicBrainzJerseyClient
         }
 
         @NotNull
-        public Builder userAgent(@NotNull String applciation, @NotNull String version) {
-            this.userAgent = String.format("%s/%s", applciation, version);
+        public Builder userAgent(@NotNull String application, @NotNull String version) {
+            this.userAgent = String.format("%s/%s", application, version);
 
             return this;
         }
 
         @NotNull
         public Builder userAgent(
-            @NotNull String applciation,
+            @NotNull String application,
             @NotNull String version,
             @NotNull String url
         ) {
-            this.userAgent = String.format("%s/%s (%s)", applciation, version, url);
+            this.userAgent = String.format("%s/%s (%s)", application, version, url);
 
             return this;
         }
