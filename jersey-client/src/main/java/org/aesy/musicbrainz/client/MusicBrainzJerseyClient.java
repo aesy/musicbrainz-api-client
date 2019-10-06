@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public final class MusicBrainzJerseyClient
     implements MusicBrainzClient {
@@ -180,7 +181,7 @@ public final class MusicBrainzJerseyClient
     public static final class Builder {
 
         @NotNull
-        private static final Factory<Client> DEFAULT_CLIENT_FACTORY;
+        private static final Supplier<Client> DEFAULT_CLIENT_SUPPLIER;
 
         @NotNull
         private static final String DEFAULT_API_BASE_URL;
@@ -189,18 +190,18 @@ public final class MusicBrainzJerseyClient
         private static final String DEFAULT_USER_AGENT;
 
         @NotNull
-        private static final Factory<Executor> DEFAULT_EXECUTOR_FACTORY;
+        private static final Supplier<Executor> DEFAULT_EXECUTOR_SUPPLIER;
 
         static {
-            DEFAULT_CLIENT_FACTORY = ClientBuilder::newClient;
+            DEFAULT_CLIENT_SUPPLIER = ClientBuilder::newClient;
             DEFAULT_API_BASE_URL = MUSICBRAINZ_API_URL;
             DEFAULT_USER_AGENT = String.format("%s/%s (%s)", APPLICATION_NAME, VERSION, URL);
-            DEFAULT_EXECUTOR_FACTORY = () -> new RateLimitedExecutor(
+            DEFAULT_EXECUTOR_SUPPLIER = () -> new RateLimitedExecutor(
                 1, TimeUnit.SECONDS, "musicbrainz-api-client");
         }
 
         @Nullable
-        private Factory<Client> clientFactory;
+        private Supplier<Client> clientSupplier;
 
         @Nullable
         private String baseUrl;
@@ -215,13 +216,13 @@ public final class MusicBrainzJerseyClient
         private String password;
 
         @Nullable
-        private Factory<Executor> executorFactory;
+        private Supplier<Executor> executorSupplier;
 
         private Builder() {}
 
         @NotNull
         public Builder client(@NotNull Client client) {
-            this.clientFactory = () -> client;
+            this.clientSupplier = () -> client;
 
             return this;
         }
@@ -274,7 +275,7 @@ public final class MusicBrainzJerseyClient
 
         @NotNull
         public Builder executor(@NotNull Executor executor) {
-            this.executorFactory = () -> executor;
+            this.executorSupplier = () -> executor;
 
             return this;
         }
@@ -282,8 +283,8 @@ public final class MusicBrainzJerseyClient
         @NotNull
         public MusicBrainzClient build() {
             String userAgent = Utils.getOrDefault(this.userAgent, DEFAULT_USER_AGENT);
-            Client client = Utils.getOrDefault(this.clientFactory, DEFAULT_CLIENT_FACTORY)
-                                 .create();
+            Client client = Utils.getOrDefault(this.clientSupplier, DEFAULT_CLIENT_SUPPLIER)
+                                 .get();
 
             client.register(new JerseyClientUserAgentFilter(userAgent));
 
@@ -295,8 +296,8 @@ public final class MusicBrainzJerseyClient
 
             String baseUrl = Utils.getOrDefault(this.baseUrl, DEFAULT_API_BASE_URL);
             WebTarget target = client.target(baseUrl);
-            Executor executor = Utils.getOrDefault(this.executorFactory, DEFAULT_EXECUTOR_FACTORY)
-                                     .create();
+            Executor executor = Utils.getOrDefault(this.executorSupplier, DEFAULT_EXECUTOR_SUPPLIER)
+                                     .get();
 
             return new MusicBrainzJerseyClient(target, executor);
         }
