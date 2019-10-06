@@ -282,9 +282,8 @@ public final class MusicBrainzJerseyClient
 
         @NotNull
         public MusicBrainzClient build() {
-            String userAgent = Utils.getOrDefault(this.userAgent, DEFAULT_USER_AGENT);
-            Client client = Utils.getOrDefault(this.clientSupplier, DEFAULT_CLIENT_SUPPLIER)
-                                 .get();
+            String userAgent = getOrDefault(this.userAgent, DEFAULT_USER_AGENT);
+            Client client = getOrDefault(this.clientSupplier, DEFAULT_CLIENT_SUPPLIER).get();
 
             client.register(new JerseyClientUserAgentFilter(userAgent));
 
@@ -294,12 +293,20 @@ public final class MusicBrainzJerseyClient
                 client.register(auth);
             }
 
-            String baseUrl = Utils.getOrDefault(this.baseUrl, DEFAULT_API_BASE_URL);
+            String baseUrl = getOrDefault(this.baseUrl, DEFAULT_API_BASE_URL);
             WebTarget target = client.target(baseUrl);
-            Executor executor = Utils.getOrDefault(this.executorSupplier, DEFAULT_EXECUTOR_SUPPLIER)
-                                     .get();
+            Executor executor = getOrDefault(this.executorSupplier, DEFAULT_EXECUTOR_SUPPLIER).get();
 
             return new MusicBrainzJerseyClient(target, executor);
+        }
+
+        @NotNull
+        private static <T> T getOrDefault(@Nullable T primary, @NotNull T alternative) {
+            if (primary != null) {
+                return primary;
+            }
+
+            return alternative;
         }
 
     }
