@@ -64,7 +64,6 @@ import java.util.concurrent.Executor;
     @NotNull
     @Override
     public CompletableFuture<MusicBrainzResponse<List<T>>> browseAsync() {
-        // TODO this may cause unneccessary rate limiting
         return CompletableFuture.supplyAsync(this::doBrowse, executor);
     }
 
@@ -119,7 +118,13 @@ import java.util.concurrent.Executor;
             MusicBrainzResponse<List<T>> response;
 
             try {
-                response = CompletableFuture.supplyAsync(iterator::next, executor).get();
+                if (result.isEmpty()) {
+                    // Make sure the first api call is not unnecessarily rate limited since the
+                    // call of this method already is.
+                    response = iterator.next();
+                } else {
+                    response = CompletableFuture.supplyAsync(iterator::next, executor).get();
+                }
             } catch (InterruptedException | ExecutionException exception) {
                 MusicBrainzException wrappedException = new MusicBrainzClientException(exception);
 
