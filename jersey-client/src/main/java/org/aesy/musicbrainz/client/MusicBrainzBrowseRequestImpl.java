@@ -75,28 +75,7 @@ import java.util.concurrent.Executor;
 
     @Override
     public void browseChunksAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback) {
-        MusicBrainzResponseCallbackHandler<List<T>> handler
-            = new MusicBrainzResponseCallbackHandler<>(callback);
-        Iterator<MusicBrainzResponse<List<T>>> iterator = new ResponseIterator(limit, offset);
-
-        while (iterator.hasNext()) {
-            MusicBrainzResponse<List<T>> response;
-
-            try {
-                response = CompletableFuture
-                    .supplyAsync(iterator::next, executor)
-                    .handleAsync(handler)
-                    .get();
-            } catch (InterruptedException | ExecutionException exception) {
-                callback.onError(new MusicBrainzClientException(exception));
-
-                return;
-            }
-
-            if (!response.isSuccessful()) {
-                return;
-            }
-        }
+        CompletableFuture.runAsync(() -> doBrowserChunked(callback), executor);
     }
 
     @NotNull
@@ -142,6 +121,31 @@ import java.util.concurrent.Executor;
         }
 
         return new MusicBrainzResponseImpl.Success<>(statusCode, result);
+    }
+
+    public void doBrowserChunked(@NotNull MusicBrainzRequestCallback<List<T>> callback) {
+        MusicBrainzResponseCallbackHandler<List<T>> handler
+            = new MusicBrainzResponseCallbackHandler<>(callback);
+        Iterator<MusicBrainzResponse<List<T>>> iterator = new ResponseIterator(limit, offset);
+
+        while (iterator.hasNext()) {
+            MusicBrainzResponse<List<T>> response;
+
+            try {
+                response = CompletableFuture
+                    .supplyAsync(iterator::next, executor)
+                    .handleAsync(handler)
+                    .get();
+            } catch (InterruptedException | ExecutionException exception) {
+                callback.onError(new MusicBrainzClientException(exception));
+
+                return;
+            }
+
+            if (!response.isSuccessful()) {
+                return;
+            }
+        }
     }
 
     private final class ResponseIterator
