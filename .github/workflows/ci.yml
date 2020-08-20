@@ -1,0 +1,41 @@
+name: Continous Integration
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build using Java ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 8 ]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up environment
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java-version }}
+    - name: Package
+      run: mvn package -Dcheckstyle.skip -DskipTests
+  test:
+    name: Test using Java ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 8 ]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up environment
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java-version }}
+    - name: Lint
+      run: mvn checkstyle:check
+    - name: Run unit tests
+      run: mvn test
