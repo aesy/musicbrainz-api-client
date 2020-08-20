@@ -1,0 +1,41 @@
+name: Continous Integration
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build using ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 8, 11 ]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up environment
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java-version }}
+    - name: Build with Maven
+      run: mvn package -Dcheckstyle.skip -DgenerateReports=false -DskipTests
+  test:
+    name: Test using ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 8, 11 ]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up environment
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java-version }}
+    - name: Lint
+      run: mvn checkstyle:check
+    - name: Test with Maven
+      run: mvn test jacoco:report coveralls:report
