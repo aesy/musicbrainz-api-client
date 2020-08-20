@@ -12,12 +12,6 @@
 
     <artifactId>musicbrainz-api-jersey-client</artifactId>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
-
     <dependencies>
 
         <dependency>
@@ -29,19 +23,31 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>2.28</version>
+            <version>2.31</version>
         </dependency>
 
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-jaxb</artifactId>
-            <version>2.28</version>
+            <version>2.31</version>
         </dependency>
 
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
-            <version>2.28</version>
+            <version>2.31</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>8.2.0</version>
         </dependency>
 
         <dependency>
@@ -86,59 +92,9 @@
         <plugins>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>io.aesy.checkstyle</groupId>
-                        <artifactId>checkstyle-config-aesy</artifactId>
-                        <version>1.0.0</version>
-                    </dependency>
-
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>8.10.1</version>
-                    </dependency>
-                </dependencies>
-
-                <configuration>
-                    <configLocation>aesy_checks.xml</configLocation>
-                    <failsOnError>true</failsOnError>
-                    <failOnViolation>false</failOnViolation>
-                    <consoleOutput>true</consoleOutput>
-                    <logViolationsToConsole>true</logViolationsToConsole>
-                    <violationSeverity>warning</violationSeverity>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>se.eris</groupId>
                 <artifactId>notnull-instrumenter-maven-plugin</artifactId>
-                <version>0.6.8</version>
+                <version>0.6.9-RC2</version>
 
                 <configuration>
                     <implicit>true</implicit>
@@ -178,7 +134,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.2.0</version>
+
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -192,7 +149,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.2.0</version>
+
+                <configuration>
+                    <source>${java.version}</source>
+                </configuration>
+
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -201,6 +163,17 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
 
         </plugins>
