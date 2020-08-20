@@ -7,6 +7,7 @@ import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
 import io.specto.hoverfly.junit5.HoverflyExtension;
 import org.aesy.musicbrainz.client.MusicBrainzClient;
 import org.aesy.musicbrainz.client.MusicBrainzJerseyClient;
+import org.aesy.musicbrainz.client.MusicBrainzResponse;
 import org.aesy.musicbrainz.concurrent.RateLimitedExecutor;
 import org.assertj.core.api.WithAssertions;
 import org.assertj.core.api.WithAssumptions;
@@ -60,6 +61,10 @@ public abstract class MusicBrainzTest
         } else {
             hoverfly.setMode(HoverflyMode.SIMULATE);
         }
+    }
+
+    protected <T> MusicBrainzAssert<T> assertThat(MusicBrainzResponse<T> response) {
+        return MusicBrainzAssert.assertThat(response);
     }
 
     protected MusicBrainzJerseyClient.Builder clientBuilder() {

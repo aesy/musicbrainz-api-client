@@ -1,6 +1,8 @@
 package org.aesy.musicbrainz.util;
 
-public interface Simulation extends AutoCloseable {
+public interface Simulation
+    extends AutoCloseable {
+
     void verify();
 
     @Override

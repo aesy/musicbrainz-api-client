@@ -39,8 +39,8 @@ public class MusicBrainzRecordingEndpointTest
             .withId(recordingId)
             .lookup();
 
-        assertThat(response.isSuccessful())
-            .isTrue();
+        assertThat(response)
+            .isSuccessful();
 
         simulation.verify();
     }
@@ -60,8 +60,8 @@ public class MusicBrainzRecordingEndpointTest
             .withCollectionId(collectionMbid)
             .browse();
 
-        assertThat(response.isSuccessful())
-            .isTrue();
+        assertThat(response)
+            .isSuccessful();
 
         simulation.verify();
     }
