@@ -38,8 +38,8 @@ public class MusicBrainzUrlEndpointTest
             .withId(artistId)
             .lookup();
 
-        assertThat(response.isSuccessful())
-            .isTrue();
+        assertThat(response)
+            .isSuccessful();
 
         simulation.verify();
     }
