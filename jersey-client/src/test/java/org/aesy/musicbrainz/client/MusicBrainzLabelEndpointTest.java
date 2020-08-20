@@ -1,8 +1,9 @@
 package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
-import org.aesy.musicbrainz.entity.Release;
-import org.aesy.musicbrainz.util.UnitTest;
+import org.aesy.musicbrainz.entity.Label;
+import org.aesy.musicbrainz.util.MusicBrainzTest;
+import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,28 +15,28 @@ import java.util.UUID;
 
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
-public class MusicBrainzReleaseEndpointUnitTest
-    extends UnitTest {
+public class MusicBrainzLabelEndpointTest
+    extends MusicBrainzTest {
 
-    private MusicBrainzReleaseEndpoint endpoint;
+    private MusicBrainzLabelEndpoint endpoint;
 
     @BeforeEach
     public void setup() {
-        this.endpoint = client().release();
+        this.endpoint = client().label();
     }
 
     @Test
-    @DisplayName("Release lookup request")
-    public void test_release_lookup() {
-        UUID releaseId = UUID.randomUUID();
+    @DisplayName("Label lookup request")
+    public void test_label_lookup() {
+        UUID labelId = UUID.randomUUID();
 
-        StubServiceBuilder request = get("release/" + releaseId)
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+        StubServiceBuilder request = get("label/" + labelId)
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
-        MusicBrainzResponse<Release> response = endpoint
-            .withId(releaseId)
+        MusicBrainzResponse<Label> response = endpoint
+            .withId(labelId)
             .lookup();
 
         assertThat(response.isSuccessful())
@@ -45,17 +46,17 @@ public class MusicBrainzReleaseEndpointUnitTest
     }
 
     @Test
-    @DisplayName("Release browse area request")
-    public void test_release_browse_area() {
+    @DisplayName("Label browse area request")
+    public void test_label_browse_area() {
         UUID areaMbid = UUID.randomUUID();
 
-        StubServiceBuilder request = get("release")
+        StubServiceBuilder request = get("label")
             .queryParam("area", areaMbid)
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
-        MusicBrainzResponse<List<Release>> response = endpoint
+        MusicBrainzResponse<List<Label>> response = endpoint
             .withAreaId(areaMbid)
             .browse();
 

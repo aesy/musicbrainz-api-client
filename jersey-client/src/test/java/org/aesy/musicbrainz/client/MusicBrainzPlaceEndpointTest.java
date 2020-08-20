@@ -1,8 +1,9 @@
 package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
-import org.aesy.musicbrainz.entity.Event;
-import org.aesy.musicbrainz.util.UnitTest;
+import org.aesy.musicbrainz.entity.Place;
+import org.aesy.musicbrainz.util.MusicBrainzTest;
+import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,28 +15,28 @@ import java.util.UUID;
 
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
-public class MusicBrainzEventEndpointUnitTest
-    extends UnitTest {
+public class MusicBrainzPlaceEndpointTest
+    extends MusicBrainzTest {
 
-    private MusicBrainzEventEndpoint endpoint;
+    private MusicBrainzPlaceEndpoint endpoint;
 
     @BeforeEach
     public void setup() {
-        this.endpoint = client().event();
+        this.endpoint = client().place();
     }
 
     @Test
-    @DisplayName("Event lookup request")
-    public void test_event_lookup() {
-        UUID eventId = UUID.randomUUID();
+    @DisplayName("Place lookup request")
+    public void test_place_lookup() {
+        UUID placeId = UUID.randomUUID();
 
-        StubServiceBuilder request = get("event/" + eventId)
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+        StubServiceBuilder request = get("place/" + placeId)
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
-        MusicBrainzResponse<Event> response = endpoint
-            .withId(eventId)
+        MusicBrainzResponse<Place> response = endpoint
+            .withId(placeId)
             .lookup();
 
         assertThat(response.isSuccessful())
@@ -45,17 +46,17 @@ public class MusicBrainzEventEndpointUnitTest
     }
 
     @Test
-    @DisplayName("Event browse area request")
-    public void test_event_browse_area() {
+    @DisplayName("Place browse area request")
+    public void test_place_browse_area() {
         UUID areaMbid = UUID.randomUUID();
 
-        StubServiceBuilder request = get("event")
+        StubServiceBuilder request = get("place")
             .queryParam("area", areaMbid)
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
-        MusicBrainzResponse<List<Event>> response = endpoint
+        MusicBrainzResponse<List<Place>> response = endpoint
             .withAreaId(areaMbid)
             .browse();
 

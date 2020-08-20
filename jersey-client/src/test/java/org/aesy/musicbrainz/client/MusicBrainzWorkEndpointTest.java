@@ -1,8 +1,9 @@
 package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
-import org.aesy.musicbrainz.entity.Series;
-import org.aesy.musicbrainz.util.UnitTest;
+import org.aesy.musicbrainz.entity.Work;
+import org.aesy.musicbrainz.util.MusicBrainzTest;
+import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,28 +15,28 @@ import java.util.UUID;
 
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
-public class MusicBrainzSeriesEndpointUnitTest
-    extends UnitTest {
+public class MusicBrainzWorkEndpointTest
+    extends MusicBrainzTest {
 
-    private MusicBrainzSeriesEndpoint endpoint;
+    private MusicBrainzWorkEndpoint endpoint;
 
     @BeforeEach
     public void setup() {
-        this.endpoint = client().series();
+        this.endpoint = client().work();
     }
 
     @Test
-    @DisplayName("Series lookup request")
-    public void test_series_lookup() {
-        UUID seriesId = UUID.randomUUID();
+    @DisplayName("Work lookup request")
+    public void test_work_lookup() {
+        UUID workId = UUID.randomUUID();
 
-        StubServiceBuilder request = get("series/" + seriesId)
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+        StubServiceBuilder request = get("work/" + workId)
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
-        MusicBrainzResponse<Series> response = endpoint
-            .withId(seriesId)
+        MusicBrainzResponse<Work> response = endpoint
+            .withId(workId)
             .lookup();
 
         assertThat(response.isSuccessful())
@@ -45,17 +46,17 @@ public class MusicBrainzSeriesEndpointUnitTest
     }
 
     @Test
-    @DisplayName("Series browse area request")
-    public void test_series_browse_area() {
+    @DisplayName("Work browse area request")
+    public void test_work_browse_area() {
         UUID collectionMbid = UUID.randomUUID();
 
-        StubServiceBuilder request = get("series")
+        StubServiceBuilder request = get("work")
             .queryParam("collection", collectionMbid)
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
-        MusicBrainzResponse<List<Series>> response = endpoint
+        MusicBrainzResponse<List<Work>> response = endpoint
             .withCollectionId(collectionMbid)
             .browse();
 

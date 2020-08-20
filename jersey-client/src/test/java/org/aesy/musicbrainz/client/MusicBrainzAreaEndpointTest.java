@@ -2,7 +2,8 @@ package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
 import org.aesy.musicbrainz.entity.DefAreaElementInner;
-import org.aesy.musicbrainz.util.UnitTest;
+import org.aesy.musicbrainz.util.MusicBrainzTest;
+import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +15,8 @@ import java.util.UUID;
 
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
-public class MusicBrainzAreaEndpointUnitTest
-    extends UnitTest {
+public class MusicBrainzAreaEndpointTest
+    extends MusicBrainzTest {
 
     private MusicBrainzAreaEndpoint endpoint;
 
@@ -30,7 +31,7 @@ public class MusicBrainzAreaEndpointUnitTest
         UUID areaId = UUID.randomUUID();
 
         StubServiceBuilder request = get("area/" + areaId)
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
@@ -52,7 +53,7 @@ public class MusicBrainzAreaEndpointUnitTest
         StubServiceBuilder request = get("area")
             .queryParam("collection", collectionMbid)
             .anyQueryParams()
-            .willReturn(success(resource("metadata.xml"), MediaType.APPLICATION_XML));
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 

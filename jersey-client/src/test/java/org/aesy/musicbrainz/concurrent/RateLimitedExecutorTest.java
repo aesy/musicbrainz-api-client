@@ -1,6 +1,6 @@
 package org.aesy.musicbrainz.concurrent;
 
-import org.aesy.musicbrainz.util.UnitTest;
+import org.aesy.musicbrainz.util.MusicBrainzTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,8 +8,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RateLimitedExecutorUnitTest
-    extends UnitTest {
+public class RateLimitedExecutorTest
+    extends MusicBrainzTest {
 
     @Test
     @DisplayName("Rate limiting")
