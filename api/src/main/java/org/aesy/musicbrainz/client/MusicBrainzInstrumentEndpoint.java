@@ -8,6 +8,9 @@ import java.util.UUID;
 public interface MusicBrainzInstrumentEndpoint {
 
     @NotNull
+    MusicBrainzInstrumentSearchRequest query();
+
+    @NotNull
     MusicBrainzInstrumentLookupRequest withId(@NotNull UUID id);
 
     @NotNull

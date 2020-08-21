@@ -7,10 +7,13 @@ import java.util.UUID;
 public interface MusicBrainzUrlEndpoint {
 
     @NotNull
+    MusicBrainzUrlSearchRequest query();
+
+    @NotNull
     MusicBrainzUrlLookupRequest withId(@NotNull UUID id);
 
     // @NotNull
-    // MusicBrainzUrlBrowseRequest withResources.readString(@NotNull Resource resource);
+    // MusicBrainzUrlBrowseRequest withResource(@NotNull Resource resource);
 
     // @NotNull
     // MusicBrainzUrlBrowseRequest withResourceId(@NotNull UUID id);

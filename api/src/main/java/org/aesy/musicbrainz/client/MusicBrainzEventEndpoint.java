@@ -11,6 +11,9 @@ import java.util.UUID;
 public interface MusicBrainzEventEndpoint {
 
     @NotNull
+    MusicBrainzEventSearchRequest query();
+
+    @NotNull
     MusicBrainzEventLookupRequest withId(@NotNull UUID id);
 
     @NotNull

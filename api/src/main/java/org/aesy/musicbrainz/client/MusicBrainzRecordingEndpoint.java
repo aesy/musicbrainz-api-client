@@ -10,6 +10,9 @@ import java.util.UUID;
 public interface MusicBrainzRecordingEndpoint {
 
     @NotNull
+    MusicBrainzRecordingSearchRequest query();
+
+    @NotNull
     MusicBrainzRecordingLookupRequest withId(@NotNull UUID id);
 
     @NotNull

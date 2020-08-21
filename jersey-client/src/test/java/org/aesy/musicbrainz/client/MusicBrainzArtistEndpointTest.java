@@ -66,4 +66,29 @@ public class MusicBrainzArtistEndpointTest
         simulation.verify();
     }
 
+    @Test
+    @DisplayName("Artist search request")
+    public void test_artist_search() {
+        UUID mbid = UUID.randomUUID();
+        String alias = "alias";
+        String name = "name";
+
+        StubServiceBuilder request = get("artist")
+            .queryParam("query", "+arid:\"" + mbid + "\" +artist:\"" + name + "\"")
+            .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
+
+        Simulation simulation = simulate(request);
+
+        MusicBrainzResponse<List<Artist>> response = endpoint
+            .query()
+            .withId(mbid)
+            .withName(name)
+            .search();
+
+        simulation.verify();
+
+        assertThat(response)
+            .isSuccessful();
+    }
+
 }

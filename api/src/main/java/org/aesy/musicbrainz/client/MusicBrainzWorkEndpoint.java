@@ -9,6 +9,9 @@ import java.util.UUID;
 public interface MusicBrainzWorkEndpoint {
 
     @NotNull
+    MusicBrainzWorkSearchRequest query();
+
+    @NotNull
     MusicBrainzWorkLookupRequest withId(@NotNull UUID id);
 
     @NotNull

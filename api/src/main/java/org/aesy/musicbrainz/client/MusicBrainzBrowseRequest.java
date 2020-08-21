@@ -19,10 +19,8 @@ public interface MusicBrainzBrowseRequest<T> {
     @NotNull
     CompletableFuture<MusicBrainzResponse<List<T>>> browseAsync();
 
-    @NotNull
     void browseAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback);
 
-    @NotNull
     void browseChunksAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback);
 
 }

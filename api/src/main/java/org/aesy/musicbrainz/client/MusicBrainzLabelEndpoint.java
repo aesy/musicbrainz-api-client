@@ -10,6 +10,9 @@ import java.util.UUID;
 public interface MusicBrainzLabelEndpoint {
 
     @NotNull
+    MusicBrainzLabelSearchRequest query();
+
+    @NotNull
     MusicBrainzLabelLookupRequest withId(@NotNull UUID id);
 
     @NotNull

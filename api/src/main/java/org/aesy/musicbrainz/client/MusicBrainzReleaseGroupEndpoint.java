@@ -10,6 +10,9 @@ import java.util.UUID;
 public interface MusicBrainzReleaseGroupEndpoint {
 
     @NotNull
+    MusicBrainzReleaseGroupSearchRequest query();
+
+    @NotNull
     MusicBrainzReleaseGroupLookupRequest withId(@NotNull UUID id);
 
     @NotNull

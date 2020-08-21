@@ -8,6 +8,9 @@ import java.util.UUID;
 public interface MusicBrainzAreaEndpoint {
 
     @NotNull
+    MusicBrainzAreaSearchRequest query();
+
+    @NotNull
     MusicBrainzAreaLookupRequest withId(@NotNull UUID id);
 
     @NotNull
