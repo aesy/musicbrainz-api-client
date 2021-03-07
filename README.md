@@ -1,8 +1,21 @@
 # MusicBrainz API Client
 
-[![Maven Repo](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/org/aesy/musicbrainz/musicbrainz/maven-metadata.xml.svg)]()
-[![Travis](https://img.shields.io/travis/aesy/musicbrainz-api-client.svg)](https://travis-ci.org/aesy/musicbrainz-api-client)
-[![License](https://img.shields.io/github/license/aesy/musicbrainz-api-client.svg)](https://github.com/aesy/musicbrainz-api-client/blob/master/LICENSE)
+[![maven-central][maven-central-image]][maven-central-url]
+[![Build Status][github-actions-image]][github-actions-url]
+[![Coverage Status][codecov-image]][codecov-url]
+[![MIT license][license-image]][license-url]
+
+[maven-central-image]: https://img.shields.io/maven-central/v/io.aesy/musicbrainz-api-client?style=flat-square
+[maven-central-url]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.aesy%22%20musicbrainz-api-client
+
+[github-actions-image]: https://img.shields.io/github/workflow/status/aesy/musicbrainz-api-client/Continous%20Integration?style=flat-square
+[github-actions-url]: https://github.com/aesy/musicbrainz-api-client/actions
+
+[codecov-image]: https://img.shields.io/codecov/c/github/aesy/musicbrainz-api-client?style=flat-square
+[codecov-url]: https://codecov.io/github/aesy/musicbrainz-api-client
+
+[license-image]: https://img.shields.io/github/license/aesy/musicbrainz-api-client?style=flat-square
+[license-url]: https://github.com/aesy/musicbrainz-api-client/blob/master/LICENSE
 
 A complete Java 8+ wrapper library for [MusicBrainz](https://musicbrainz.org/) web service API 
 (version 2).

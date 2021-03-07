@@ -20,8 +20,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java-version }}
-    - name: Package
-      run: mvn package -Dcheckstyle.skip -DskipTests
+    - name: Build with Maven
+      run: mvn package -Dcheckstyle.skip -DgenerateReports=false -DskipTests
   test:
     name: Test using Java ${{ matrix.java-version }}
     runs-on: ubuntu-latest
@@ -35,7 +35,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java-version }}
-    - name: Lint
+    - name: Lint with Checkstyle
       run: mvn checkstyle:check
-    - name: Run unit tests
-      run: mvn test
+    - name: Test with Maven
+      run: mvn test jacoco:report
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.2.1
+      with:
+        file: jersey-client/target/site/jacoco/jacoco.xml
