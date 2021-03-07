@@ -1,3 +1,5 @@
+<img align="left" width="80" height="80" src="./img/icon.svg">
+
 # MusicBrainz API Client
 
 [![maven-central][maven-central-image]][maven-central-url]
@@ -57,6 +59,14 @@ System.out.println(artists.size());
 #### Asynchronous request with callback:
 
 ```java
+client.artist()
+      .withId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
+      .lookupAsync(new MusicBrainzRequestCallbackAdapter<Artist>() {
+          @Override
+          public void onSuccess(@NotNull Artist artist) {
+              System.out.println(artist);
+          }
+      });
 client.artist.search("Peter Gabriel") // Create a search request.
              // Execute the request asynchronously and provide a callback.
              .executeAsync(new MusicBrainzRequestCallbackAdapter<ArtistList>() {
