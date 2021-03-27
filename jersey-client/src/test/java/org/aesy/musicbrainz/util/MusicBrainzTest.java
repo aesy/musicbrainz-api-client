@@ -51,7 +51,7 @@ public abstract class MusicBrainzTest
         }
 
         if (isIntegrationTest) {
-            MusicBrainzTest.executor = new RateLimitedExecutor(20, TimeUnit.MINUTES);
+            MusicBrainzTest.executor = new RateLimitedExecutor(10, TimeUnit.MINUTES);
         } else {
             // Avoid rate limiting for faster tests
             MusicBrainzTest.executor = Executors.newCachedThreadPool();
@@ -77,8 +77,8 @@ public abstract class MusicBrainzTest
 
     protected MusicBrainzJerseyClient.Builder clientBuilder() {
         ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS);
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS);
 
         if ("https".equals(musicbrainzUrl.getProtocol())) {
             SSLContext sslContext = hoverfly.getSslConfigurer().getSslContext();
@@ -87,6 +87,7 @@ public abstract class MusicBrainzTest
 
         return MusicBrainzJerseyClient
             .builder()
+            .userAgent("musicbrainz-api-client/integration-testing (https://github.com/aesy/musicbrainz-api-client)")
             .client(clientBuilder.build())
             .baseUrl(musicbrainzUrl.toString())
             .executor(executor);

@@ -22,8 +22,8 @@ jobs:
         java-version: ${{ matrix.java-version }}
     - name: Build with Maven
       run: mvn package -Dcheckstyle.skip -DgenerateReports=false -DskipTests
-  test:
-    name: Test using Java ${{ matrix.java-version }}
+  unit-test:
+    name: Run unit tests using Java ${{ matrix.java-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,3 +43,20 @@ jobs:
       uses: codecov/codecov-action@v1.2.1
       with:
         file: jersey-client/target/site/jacoco/jacoco.xml
+  integration-test:
+    name: Run integration tests using Java ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 11 ]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up environment
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java-version }}
+    - name: Test with Maven
+      run: mvn test || true
+      env:
+        MUSICBRAINZ_URL: "https://test.musicbrainz.org/ws/2"
