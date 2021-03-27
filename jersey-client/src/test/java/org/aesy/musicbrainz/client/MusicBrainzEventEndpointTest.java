@@ -2,6 +2,7 @@ package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
 import org.aesy.musicbrainz.entity.Event;
+import org.aesy.musicbrainz.util.MBID;
 import org.aesy.musicbrainz.util.MusicBrainzTest;
 import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
@@ -28,7 +29,7 @@ public class MusicBrainzEventEndpointTest
     @Test
     @DisplayName("Event lookup request")
     public void test_event_lookup() {
-        UUID eventId = UUID.randomUUID();
+        UUID eventId = MBID.Event.BJORK_AT_GLOBEN;
 
         StubServiceBuilder request = get("event/" + eventId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
@@ -48,16 +49,16 @@ public class MusicBrainzEventEndpointTest
     @Test
     @DisplayName("Event browse area request")
     public void test_event_browse_area() {
-        UUID areaMbid = UUID.randomUUID();
+        UUID areaId = MBID.Area.STOCKHOLM;
 
         StubServiceBuilder request = get("event")
-            .queryParam("area", areaMbid)
+            .queryParam("area", areaId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
         MusicBrainzResponse<List<Event>> response = endpoint
-            .withAreaId(areaMbid)
+            .withAreaId(areaId)
             .browse();
 
         assertThat(response)

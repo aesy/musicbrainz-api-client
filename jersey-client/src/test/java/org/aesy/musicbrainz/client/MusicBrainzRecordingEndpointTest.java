@@ -2,6 +2,7 @@ package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
 import org.aesy.musicbrainz.entity.Recording;
+import org.aesy.musicbrainz.util.MBID;
 import org.aesy.musicbrainz.util.MusicBrainzTest;
 import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
@@ -28,7 +29,7 @@ public class MusicBrainzRecordingEndpointTest
     @Test
     @DisplayName("Recording lookup request")
     public void test_recording_lookup() {
-        UUID recordingId = UUID.randomUUID();
+        UUID recordingId = MBID.Recording.VOULEZ_VOUS;
 
         StubServiceBuilder request = get("recording/" + recordingId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
@@ -46,18 +47,18 @@ public class MusicBrainzRecordingEndpointTest
     }
 
     @Test
-    @DisplayName("Recording browse area request")
-    public void test_recording_browse_area() {
-        UUID collectionMbid = UUID.randomUUID();
+    @DisplayName("Recording browse artist request")
+    public void test_recording_browse_artist() {
+        UUID artistId = MBID.Artist.PETER_GABRIEL;
 
         StubServiceBuilder request = get("recording")
-            .queryParam("collection", collectionMbid)
+            .queryParam("artist", artistId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
         MusicBrainzResponse<List<Recording>> response = endpoint
-            .withCollectionId(collectionMbid)
+            .withArtistId(artistId)
             .browse();
 
         assertThat(response)

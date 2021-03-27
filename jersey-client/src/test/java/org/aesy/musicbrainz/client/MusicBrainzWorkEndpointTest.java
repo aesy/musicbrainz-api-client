@@ -2,6 +2,7 @@ package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
 import org.aesy.musicbrainz.entity.Work;
+import org.aesy.musicbrainz.util.MBID;
 import org.aesy.musicbrainz.util.MusicBrainzTest;
 import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
@@ -28,7 +29,7 @@ public class MusicBrainzWorkEndpointTest
     @Test
     @DisplayName("Work lookup request")
     public void test_work_lookup() {
-        UUID workId = UUID.randomUUID();
+        UUID workId = MBID.Work.MELISSA_JUICE;
 
         StubServiceBuilder request = get("work/" + workId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
@@ -46,18 +47,18 @@ public class MusicBrainzWorkEndpointTest
     }
 
     @Test
-    @DisplayName("Work browse area request")
-    public void test_work_browse_area() {
-        UUID collectionMbid = UUID.randomUUID();
+    @DisplayName("Work browse artist request")
+    public void test_work_browse_artist() {
+        UUID artistId = MBID.Artist.PETER_GABRIEL;
 
         StubServiceBuilder request = get("work")
-            .queryParam("collection", collectionMbid)
+            .queryParam("artist", artistId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
         MusicBrainzResponse<List<Work>> response = endpoint
-            .withCollectionId(collectionMbid)
+            .withArtistId(artistId)
             .browse();
 
         assertThat(response)

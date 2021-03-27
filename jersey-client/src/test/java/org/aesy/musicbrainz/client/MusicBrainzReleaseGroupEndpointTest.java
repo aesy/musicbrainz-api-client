@@ -2,6 +2,7 @@ package org.aesy.musicbrainz.client;
 
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder;
 import org.aesy.musicbrainz.entity.ReleaseGroup;
+import org.aesy.musicbrainz.util.MBID;
 import org.aesy.musicbrainz.util.MusicBrainzTest;
 import org.aesy.musicbrainz.util.Resources;
 import org.aesy.musicbrainz.util.Simulation;
@@ -28,7 +29,7 @@ public class MusicBrainzReleaseGroupEndpointTest
     @Test
     @DisplayName("Release group lookup request")
     public void test_releaseGroup_lookup() {
-        UUID releaseGroupId = UUID.randomUUID();
+        UUID releaseGroupId = MBID.ReleaseGroup.IN_RAINBOWS;
 
         StubServiceBuilder request = get("release-group/" + releaseGroupId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
@@ -46,18 +47,18 @@ public class MusicBrainzReleaseGroupEndpointTest
     }
 
     @Test
-    @DisplayName("Release group browse area request")
-    public void test_releaseGroup_browse_area() {
-        UUID collectionMbid = UUID.randomUUID();
+    @DisplayName("Release group browse artist request")
+    public void test_releaseGroup_browse_artist() {
+        UUID artistId = MBID.Artist.PETER_GABRIEL;
 
         StubServiceBuilder request = get("release-group")
-            .queryParam("collection", collectionMbid)
+            .queryParam("artist", artistId)
             .willReturn(success(Resources.readString("metadata.xml"), MediaType.APPLICATION_XML));
 
         Simulation simulation = simulate(request);
 
         MusicBrainzResponse<List<ReleaseGroup>> response = endpoint
-            .withCollectionId(collectionMbid)
+            .withArtistId(artistId)
             .browse();
 
         assertThat(response)
