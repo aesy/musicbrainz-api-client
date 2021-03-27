@@ -31,27 +31,34 @@ public abstract class MusicBrainzTest
 
     private static final String MUSICBRAINZ_URL = "MUSICBRAINZ_URL";
 
-    private final URL musicbrainzUrl;
-    private final boolean isIntegrationTest;
+    private static URL musicbrainzUrl;
+    private static boolean isIntegrationTest;
+    private static Executor executor;
 
-    private Hoverfly hoverfly;
-
-    public MusicBrainzTest() {
+    static {
         String musicbrainzUrl = System.getenv(MUSICBRAINZ_URL);
 
-        this.isIntegrationTest = musicbrainzUrl != null;
+        MusicBrainzTest.isIntegrationTest = musicbrainzUrl != null;
 
         if (!isIntegrationTest) {
-            // Avoid SSL handshake which hoverfly complains about in SIMULATE mode
             musicbrainzUrl = "http://musicbrainz.org/ws/2";
         }
 
         try {
-            this.musicbrainzUrl = new URL(musicbrainzUrl);
+            MusicBrainzTest.musicbrainzUrl = new URL(musicbrainzUrl);
         } catch (MalformedURLException exception) {
             throw new IllegalArgumentException("Invalid musicbrainz URL", exception);
         }
+
+        if (isIntegrationTest) {
+            MusicBrainzTest.executor = new RateLimitedExecutor(20, TimeUnit.MINUTES);
+        } else {
+            // Avoid rate limiting for faster tests
+            MusicBrainzTest.executor = Executors.newCachedThreadPool();
+        }
     }
+
+    private Hoverfly hoverfly;
 
     @BeforeEach
     private void getHoverflyInstance(Hoverfly hoverfly) {
@@ -69,15 +76,6 @@ public abstract class MusicBrainzTest
     }
 
     protected MusicBrainzJerseyClient.Builder clientBuilder() {
-        Executor executor;
-
-        if (isIntegrationTest) {
-            executor = new RateLimitedExecutor(1, TimeUnit.SECONDS);
-        } else {
-            // Avoid rate limiting for faster tests
-            executor = Executors.newCachedThreadPool();
-        }
-
         ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS);
