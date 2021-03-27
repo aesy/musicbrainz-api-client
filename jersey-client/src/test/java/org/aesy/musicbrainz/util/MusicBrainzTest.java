@@ -57,7 +57,7 @@ public abstract class MusicBrainzTest
         this.hoverfly = hoverfly;
 
         if (isIntegrationTest) {
-            hoverfly.setMode(HoverflyMode.SPY);
+            hoverfly.setMode(HoverflyMode.CAPTURE);
         } else {
             hoverfly.setMode(HoverflyMode.SIMULATE);
         }
