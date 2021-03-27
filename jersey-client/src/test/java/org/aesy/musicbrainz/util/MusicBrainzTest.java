@@ -15,7 +15,8 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import javax.ws.rs.client.Client;
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.ClientBuilder;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Executor;
@@ -77,11 +78,18 @@ public abstract class MusicBrainzTest
             executor = Executors.newCachedThreadPool();
         }
 
-        Client client = JerseyClientBuilder.createClient();
+        ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS);
+
+        if ("https".equals(musicbrainzUrl.getProtocol())) {
+            SSLContext sslContext = hoverfly.getSslConfigurer().getSslContext();
+            clientBuilder = clientBuilder.sslContext(sslContext);
+        }
 
         return MusicBrainzJerseyClient
             .builder()
-            .client(client)
+            .client(clientBuilder.build())
             .baseUrl(musicbrainzUrl.toString())
             .executor(executor);
     }
