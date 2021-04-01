@@ -19,102 +19,165 @@
 [license-image]: https://img.shields.io/github/license/aesy/musicbrainz-api-client?style=flat-square
 [license-url]: https://github.com/aesy/musicbrainz-api-client/blob/master/LICENSE
 
-A complete Java 8+ wrapper library for [MusicBrainz](https://musicbrainz.org/) web service API 
-(version 2).
+A Java 8+ wrapper library for [MusicBrainz](https://musicbrainz.org/) web service API (version 2).
 
 ### [API Reference](https://aesy.github.io/musicbrainz-api-client/)
 
 ## Usage
-First you need to create an instance of a MusicBrainzApiClient. 
-`MusicBrainzApiClient.createWithDefaults()` will create a new instance with a default HTTP client. 
-You can provide your own client by using the static inner builder inside MusicBrainzApiClient. 
 
-### Client examples:
-
-#### Default client:
+First you need to create an instance of a MusicBrainzClient. 
+The following will create a new musicbrainz client with a Jersey backend: 
 
 ```java
-MusicBrainzApiClient client = MusicBrainzApiClient.createWithDefaults();
+MusicBrainzClient client = MusicBrainzJerseyClient.createWithDefaults();
 ```
 
-All methods on a `MusicBrainzApiClient` return a `MusicBrainzRequest`. No actual HTTP request is 
-sent though until one of two methods is called on this request. These methods are: 
-`MusicBrainzRequest#execute` and `MusicBrainzRequest#executeAsync`. Like the names suggest, the 
-first one is synchronous, while the second is asynchronous. The asynchronous method may take 
-a callback/listener, otherwise it will return a `CompletableFuture`.
-
-### Request examples:
+### Lookup requests
 
 #### Syncronous request:
 
 ```java
-List<Artist> artists = client.artist.search("Peter Gabriel") // Create a search request.
-                                    .execute()    // Execute the HTTP request synchronously and returns a `MusicBrainzResponse`.
-                                    .getOrNull()  // Get a mapped entity of the response body (in this case an 
-                                                  // `ArtistList` or null in case an error occurred. 
-                                    .getArtist(); // Get list of artist entities.
-System.out.println(artists.size()); 
+Artist artist = client.artist()
+        .withId(UUID.fromString("8e66ea2b-b57b-47d9-8df0-df4630aeb8e5"))
+        .lookup()
+        .get(); 
+System.out.println(artist);
 ```
 
 #### Asynchronous request with callback:
 
 ```java
 client.artist()
-      .withId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
-      .lookupAsync(new MusicBrainzRequestCallbackAdapter<Artist>() {
-          @Override
-          public void onSuccess(@NotNull Artist artist) {
-              System.out.println(artist);
-          }
-      });
-client.artist.search("Peter Gabriel") // Create a search request.
-             // Execute the request asynchronously and provide a callback.
-             .executeAsync(new MusicBrainzRequestCallbackAdapter<ArtistList>() {
-                 // Only called on success, meaning that `MusicBrainzResponse#get` is guaranteed not to throw.
-                 @Override
-                 public void onSuccess(@NotNull MusicBrainzResponse.Success<ArtistList> response) {
-                     List<Artist> artists = response.get().getArtist();
-                     System.out.println(artists.size());
-                 }
-             });
+        .withId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
+        .lookupAsync(new MusicBrainzRequestCallbackAdapter<Artist>() {
+            @Override
+            public void onSuccess(@NotNull Artist artist) {
+                System.out.println(artist);
+            }
+        });
 ```
 
 #### Asynchronous request with CompletableFuture:
 
 ```java
-client.artist.search("Peter Gabriel") // Create a search request.
-             .executeAsync()          // Execute the request asynchronously and return a Future.
-             .thenApply(response -> response.get().getArtist().size()) // Get the amount of artists.
-             .thenAccept(System.out::println);                         // Print the result if no error occurred.
+client.artist()
+        .withId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
+        .lookupAsync()
+        .thenApply(MusicBrainzResponse::get)
+        .thenAccept(System.out::println);
 ```
 
-#### Response entities
+### Browse requests
 
-All response entities are auto-generated from musicbrainz source. There are no guaranteed expected
-values will be present, such as the artist list in the examples above. Make sure to check 
-results for null.
+#### Syncronous request:
+
+```java
+List<Artist> artists = client.artist()
+        .withAreaId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
+        .browse()
+        .get(); 
+System.out.println(artists.size());
+```
+
+#### Asynchronous request with callback:
+
+```java
+client.artist()
+        .withAreaId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
+        .browseAsync(new MusicBrainzRequestCallbackAdapter<List<Artist>>() {
+            @Override
+            public void onSuccess(@NotNull List<Artist> artists) {
+                System.out.println(artists.size());
+            }
+        });
+```
+
+#### Asynchronous chunked requests with callback:
+
+Chunked requests periodically fetch chunks of data until all data that's available have been fetched.
+The callback is invoked one or more times.
+
+```java
+client.artist()
+        .withAreaId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
+        .browseChunksAsync(new MusicBrainzRequestCallbackAdapter<List<Artist>>() {
+            @Override
+            public void onSuccess(@NotNull List<Artist> artists) {
+                System.out.println(artists.size());
+            }
+        });
+```
+
+#### Asynchronous request with CompletableFuture:
+
+```java
+client.artist()
+        .withAreaId(UUID.fromString("1127ddc2-eab3-4662-8718-6adbdeea3b10"))
+        .browseAsync()
+        .thenApply(MusicBrainzResponse::get)
+        .thenApply(List::size)
+        .thenAccept(System.out::println);
+```
+
+### Search requests
+
+Not yet implemented
+
+### Response entities
+
+All response entities are auto-generated from musicbrainz source. There is no guarantee any 
+of the entities properties will be present, therefore make sure to check the results or 
+handle nulls.
 
 ## Installation
-Using Gradle, add this to your build script: 
 
-```groovy
-repositories {
-    mavenCentral()
-}
-dependencies {
-    compile 'org.aesy:musicbrainz-api-client-core:1.0.0'
-}
+The library has not yet been released to maven central
+
+## Development
+
+#### Prerequisites
+
+* [A Java 8-11 Runtime](https://adoptopenjdk.net/)
+* [Maven 3.6+](https://maven.apache.org/download.cgi)
+
+Compilation currently does not support Java 15 due to missing support in the 
+`notnull-instrumenter-maven-plugin` dependency.
+
+#### Build
+
+To compile and package the application, simply issue the following command:
+
+```sh
+$ mvn package -DskipTests
 ```
 
-Using Maven, add this to your list of dependencies in `pom.xml`:
+This will create a jar located in `jersey-client/target/`.
 
-```xml
-<dependency>
-  <groupId>org.aesy</groupId>
-  <artifactId>musicbrainz-api-client-core</artifactId>
-  <version>1.0.0</version>
-</dependency>
+#### Test 
+
+This project uses [checkstyle](https://checkstyle.sourceforge.io/) for linting. Run it by using:
+
+```sh
+$ mvn checkstyle:check
 ```
+
+All code that goes into master must pass all tests, including the lint checks.
+
+To run unit tests, simply run:
+
+```sh
+$ mvn test
+```
+
+It's also possible to run these very same tests in integration test mode towards an existsing 
+musicbrainz server by providing a url as an environment variable. The following command will 
+run the tests towards the musicbrainz test server:
+
+```sh
+$ MUSICBRAINZ_URL=https://test.musicbrainz.org/ws/2 mvn test
+```
+
+These integration tests are slow because they use rate limiting as to not overload their servers. 
 
 ## Contribute
 Use the [issue tracker](https://github.com/aesy/musicbrainz-api-client/issues) to report bugs or 
