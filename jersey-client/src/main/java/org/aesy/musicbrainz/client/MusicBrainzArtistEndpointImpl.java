@@ -1,6 +1,7 @@
 package org.aesy.musicbrainz.client;
 
 import org.aesy.musicbrainz.entity.*;
+import org.apache.lucene.search.Query;
 import org.jetbrains.annotations.NotNull;
 
 import javax.ws.rs.client.WebTarget;
@@ -25,6 +26,18 @@ import java.util.concurrent.Executor;
     ) {
         this.target = target.path(ENDPOINT_PATH);
         this.executor = executor;
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzArtistSearchRequest query() {
+        return new MusicBrainzArtistSearchRequestImpl(target, executor);
+    }
+
+    @NotNull
+    @Override
+    public MusicBrainzArtistSearchRequest query(Query query) {
+        return new MusicBrainzArtistSearchRequestImpl(target, executor, query);
     }
 
     @NotNull

@@ -1,11 +1,18 @@
 package org.aesy.musicbrainz.client;
 
 import org.aesy.musicbrainz.entity.*;
+import org.apache.lucene.search.Query;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public interface MusicBrainzArtistEndpoint {
+
+    @NotNull
+    MusicBrainzArtistSearchRequest query();
+
+    @NotNull
+    MusicBrainzArtistSearchRequest query(Query query);
 
     @NotNull
     MusicBrainzArtistLookupRequest withId(@NotNull UUID id);

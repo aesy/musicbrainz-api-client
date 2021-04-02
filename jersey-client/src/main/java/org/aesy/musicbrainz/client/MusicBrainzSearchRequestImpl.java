@@ -15,8 +15,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
-/* package-private */ abstract class MusicBrainzBrowseRequestImpl<T>
-    implements MusicBrainzBrowseRequest<T> {
+/* package-private */ abstract class MusicBrainzSearchRequestImpl<T>
+    implements MusicBrainzSearchRequest<T> {
 
     @NotNull
     private final Executor executor;
@@ -25,7 +25,7 @@ import java.util.concurrent.Executor;
 
     private long offset;
 
-    protected MusicBrainzBrowseRequestImpl(
+    protected MusicBrainzSearchRequestImpl(
         @NotNull Executor executor
     ) {
         this.executor = executor;
@@ -35,7 +35,7 @@ import java.util.concurrent.Executor;
 
     @NotNull
     @Override
-    public MusicBrainzBrowseRequest<T> limitBy(long limit) {
+    public MusicBrainzSearchRequest<T> limitBy(long limit) {
         this.limit = limit;
 
         return this;
@@ -43,7 +43,7 @@ import java.util.concurrent.Executor;
 
     @NotNull
     @Override
-    public MusicBrainzBrowseRequest<T> offsetBy(long offset) {
+    public MusicBrainzSearchRequest<T> offsetBy(long offset) {
         this.offset = offset;
 
         return this;
@@ -51,9 +51,9 @@ import java.util.concurrent.Executor;
 
     @NotNull
     @Override
-    public MusicBrainzResponse<List<T>> browse() {
+    public MusicBrainzResponse<List<T>> search() {
         try {
-            return browseAsync().get();
+            return searchAsync().get();
         } catch (InterruptedException | ExecutionException exception) {
             MusicBrainzException wrappedException = new MusicBrainzClientException(exception);
 
@@ -63,19 +63,40 @@ import java.util.concurrent.Executor;
 
     @NotNull
     @Override
-    public CompletableFuture<MusicBrainzResponse<List<T>>> browseAsync() {
-        return CompletableFuture.supplyAsync(this::doBrowse, executor);
+    public CompletableFuture<MusicBrainzResponse<List<T>>> searchAsync() {
+        return CompletableFuture.supplyAsync(this::doSearch, executor);
     }
 
     @Override
-    public void browseAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback) {
-        browseAsync()
+    public void searchAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback) {
+        searchAsync()
             .handleAsync(new MusicBrainzResponseCallbackHandler<>(callback));
     }
 
     @Override
-    public void browseChunksAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback) {
-        CompletableFuture.runAsync(() -> doBrowserChunked(callback), executor);
+    public void searchChunksAsync(@NotNull MusicBrainzRequestCallback<List<T>> callback) {
+        MusicBrainzResponseCallbackHandler<List<T>> handler
+            = new MusicBrainzResponseCallbackHandler<>(callback);
+        Iterator<MusicBrainzResponse<List<T>>> iterator = new ResponseIterator(limit, offset);
+
+        while (iterator.hasNext()) {
+            MusicBrainzResponse<List<T>> response;
+
+            try {
+                response = CompletableFuture
+                    .supplyAsync(iterator::next, executor)
+                    .handleAsync(handler)
+                    .get();
+            } catch (InterruptedException | ExecutionException exception) {
+                callback.onError(new MusicBrainzClientException(exception));
+
+                return;
+            }
+
+            if (!response.isSuccessful()) {
+                return;
+            }
+        }
     }
 
     @NotNull
@@ -87,7 +108,7 @@ import java.util.concurrent.Executor;
         throws MusicBrainzEntityMappingException;
 
     @NotNull
-    private MusicBrainzResponse<List<T>> doBrowse() {
+    private MusicBrainzResponse<List<T>> doSearch() {
         List<T> result = new ArrayList<>();
         int statusCode = -1;
 
@@ -121,31 +142,6 @@ import java.util.concurrent.Executor;
         }
 
         return new MusicBrainzResponseImpl.Success<>(statusCode, result);
-    }
-
-    private void doBrowserChunked(@NotNull MusicBrainzRequestCallback<List<T>> callback) {
-        MusicBrainzResponseCallbackHandler<List<T>> handler
-            = new MusicBrainzResponseCallbackHandler<>(callback);
-        Iterator<MusicBrainzResponse<List<T>>> iterator = new ResponseIterator(limit, offset);
-
-        while (iterator.hasNext()) {
-            MusicBrainzResponse<List<T>> response;
-
-            try {
-                response = CompletableFuture
-                    .supplyAsync(iterator::next, executor)
-                    .handleAsync(handler)
-                    .get();
-            } catch (InterruptedException | ExecutionException exception) {
-                callback.onError(new MusicBrainzClientException(exception));
-
-                return;
-            }
-
-            if (!response.isSuccessful()) {
-                return;
-            }
-        }
     }
 
     private final class ResponseIterator
