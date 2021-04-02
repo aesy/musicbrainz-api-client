@@ -94,7 +94,7 @@
             <plugin>
                 <groupId>se.eris</groupId>
                 <artifactId>notnull-instrumenter-maven-plugin</artifactId>
-                <version>0.6.9-RC2</version>
+                <version>1.0.0</version>
 
                 <configuration>
                     <implicit>true</implicit>

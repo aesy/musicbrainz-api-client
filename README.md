@@ -137,11 +137,8 @@ The library has not yet been released to maven central
 
 #### Prerequisites
 
-* [A Java 8-11 Runtime](https://adoptopenjdk.net/)
+* [A Java 8+ Runtime](https://adoptopenjdk.net/)
 * [Maven 3.6+](https://maven.apache.org/download.cgi)
-
-Compilation currently does not support Java 15 due to missing support in the 
-`notnull-instrumenter-maven-plugin` dependency.
 
 #### Build
 
