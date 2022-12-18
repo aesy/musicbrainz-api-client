@@ -12,8 +12,10 @@
 
     <artifactId>musicbrainz-api-jersey-client</artifactId>
 
-    <dependencies>
+    <name>MusicBrainz Api Jersey Client</name>
+    <description>A MusicBrainz web service API (version 2) HTTP client implementation using Jersey</description>
 
+    <dependencies>
         <dependency>
             <groupId>org.aesy.musicbrainz</groupId>
             <artifactId>musicbrainz-api</artifactId>
@@ -84,13 +86,10 @@
             <version>0.11.2</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
-
         <plugins>
-
             <plugin>
                 <groupId>se.eris</groupId>
                 <artifactId>notnull-instrumenter-maven-plugin</artifactId>
@@ -118,76 +117,37 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.0</version>
 
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.0</version>
-
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.aesy.checkstyle</groupId>
+                        <artifactId>checkstyle-config-aesy</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+                </dependencies>
 
                 <configuration>
-                    <source>${java.version}</source>
+                    <configLocation>aesy_checks.xml</configLocation>
+                    <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>false</failOnViolation>
+                    <consoleOutput>true</consoleOutput>
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <violationSeverity>warning</violationSeverity>
                 </configuration>
 
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
+                        <id>validate</id>
+                        <phase>validate</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
-
-                <configuration>
-                    <outputDirectory>docs</outputDirectory>
-                </configuration>
-            </plugin>
-
         </plugins>
-
     </build>
-
 </project>

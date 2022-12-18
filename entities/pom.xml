@@ -12,8 +12,10 @@
 
     <artifactId>musicbrainz-api-entities</artifactId>
 
-    <dependencies>
+    <name>MusicBrainz Api Entities</name>
+    <description>MusicBrainz API data transfer objects</description>
 
+    <dependencies>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -25,13 +27,10 @@
             <artifactId>jakarta.annotation-api</artifactId>
             <version>1.3.5</version>
         </dependency>
-
     </dependencies>
 
     <build>
-
         <plugins>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>wagon-maven-plugin</artifactId>
@@ -98,20 +97,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-
         </plugins>
-
     </build>
-
 </project>

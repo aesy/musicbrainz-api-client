@@ -12,8 +12,10 @@
 
     <artifactId>musicbrainz-api</artifactId>
 
-    <dependencies>
+    <name>MusicBrainz Client Interface</name>
+    <description>The interface for a MusicBrainz web service API (version 2) HTTP client</description>
 
+    <dependencies>
         <dependency>
             <groupId>org.aesy.musicbrainz</groupId>
             <artifactId>musicbrainz-api-entities</artifactId>
@@ -31,26 +33,44 @@
             <artifactId>annotations</artifactId>
             <version>17.0.0</version>
         </dependency>
-
     </dependencies>
 
     <build>
-
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.0</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>io.aesy.checkstyle</groupId>
+                        <artifactId>checkstyle-config-aesy</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+                </dependencies>
 
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <configLocation>aesy_checks.xml</configLocation>
+                    <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>false</failOnViolation>
+                    <consoleOutput>true</consoleOutput>
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <violationSeverity>warning</violationSeverity>
                 </configuration>
+
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-
         </plugins>
-
     </build>
 
 </project>
