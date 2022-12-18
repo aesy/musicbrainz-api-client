@@ -94,7 +94,7 @@
             <plugin>
                 <groupId>se.eris</groupId>
                 <artifactId>notnull-instrumenter-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>1.1.1</version>
 
                 <configuration>
                     <implicit>true</implicit>
@@ -173,6 +173,16 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+
+                <configuration>
+                    <outputDirectory>docs</outputDirectory>
                 </configuration>
             </plugin>
 
