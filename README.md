@@ -10,7 +10,7 @@
 [maven-central-image]: https://img.shields.io/maven-central/v/io.aesy/musicbrainz-api-client?style=flat-square
 [maven-central-url]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.aesy%22%20musicbrainz-api-client
 
-[github-actions-image]: https://img.shields.io/github/workflow/status/aesy/musicbrainz-api-client/Continous%20Integration?style=flat-square
+[github-actions-image]: https://img.shields.io/github/actions/workflow/status/aesy/musicbrainz-api-client/ci.yml?branch=master&style=flat-square
 [github-actions-url]: https://github.com/aesy/musicbrainz-api-client/actions
 
 [codecov-image]: https://img.shields.io/codecov/c/github/aesy/musicbrainz-api-client?style=flat-square
