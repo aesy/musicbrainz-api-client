@@ -34,7 +34,7 @@ MusicBrainzClient client = MusicBrainzJerseyClient.createWithDefaults();
 
 ### Lookup requests
 
-#### Syncronous request:
+#### Synchronous request:
 
 ```java
 Artist artist = client.artist()
@@ -69,7 +69,7 @@ client.artist()
 
 ### Browse requests
 
-#### Syncronous request:
+#### Synchronous request:
 
 ```java
 List<Artist> artists = client.artist()
@@ -131,7 +131,26 @@ handle nulls.
 
 ## Installation
 
-The library has not yet been released to maven central
+Using Gradle, add this to your build script: 
+
+```groovy
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile 'io.aesy.musicbrainz:musicbrainz-api-jersey-client:1.0.0'
+}
+```
+
+Using Maven, add this to your list of dependencies in `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>io.aesy.musicbrainz:musicbrainz-api-jersey-client</groupId>
+  <artifactId>musicbrainz-api-jersey-client</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
 
 ## Development
 

@@ -37,7 +37,7 @@ public final class MusicBrainzJerseyClient
         MUSICBRAINZ_API_URL = "https://musicbrainz.org/ws/2";
         MUSICBRAINZ_API_TEST_URL = "https://test.musicbrainz.org/ws/2";
         APPLICATION_NAME = "musicbrainz-api-client";
-        VERSION = "1.0.0-SNAPSHOT";
+        VERSION = "1.0.0";
         URL = "https://github.com/aesy/musicbrainz-api-client";
     }
 
