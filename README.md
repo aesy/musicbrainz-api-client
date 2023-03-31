@@ -7,7 +7,7 @@
 [![Coverage Status][codecov-image]][codecov-url]
 [![MIT license][license-image]][license-url]
 
-[maven-central-image]: https://img.shields.io/maven-central/v/io.aesy/musicbrainz-api-client?style=flat-square
+[maven-central-image]: https://img.shields.io/maven-central/v/io.aesy.musicbrainz/musicbrainz-api-client?style=flat-square
 [maven-central-url]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.aesy%22%20musicbrainz-api-client
 
 [github-actions-image]: https://img.shields.io/github/actions/workflow/status/aesy/musicbrainz-api-client/ci.yml?branch=master&style=flat-square
@@ -146,7 +146,7 @@ Using Maven, add this to your list of dependencies in `pom.xml`:
 
 ```xml
 <dependency>
-  <groupId>io.aesy.musicbrainz:musicbrainz-api-jersey-client</groupId>
+  <groupId>io.aesy.musicbrainz</groupId>
   <artifactId>musicbrainz-api-jersey-client</artifactId>
   <version>1.0.0</version>
 </dependency>
@@ -185,15 +185,15 @@ To run unit tests, simply run:
 $ mvn test
 ```
 
-It's also possible to run these very same tests in integration test mode towards an existsing 
-musicbrainz server by providing a url as an environment variable. The following command will 
+It's also possible to run these very same tests in integration test mode towards an existing 
+musicbrainz server by providing an url as an environment variable. The following command will 
 run the tests towards the musicbrainz test server:
 
 ```sh
 $ MUSICBRAINZ_URL=https://test.musicbrainz.org/ws/2 mvn test
 ```
 
-These integration tests are slow because they use rate limiting as to not overload their servers. 
+These integration tests are slow because they use rate limiting as to not overload the server. 
 
 ## Contribute
 Use the [issue tracker](https://github.com/aesy/musicbrainz-api-client/issues) to report bugs or 
